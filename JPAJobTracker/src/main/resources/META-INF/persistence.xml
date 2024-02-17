@@ -6,6 +6,11 @@
 	<persistence-unit name="JPAJobTracker">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
+		<class>com.skilldistillery.jobtracker.entities.Job</class>
+		<class>com.skilldistillery.jobtracker.entities.Location</class>
+		<class>com.skilldistillery.jobtracker.entities.Match</class>
+		<class>com.skilldistillery.jobtracker.entities.Preferences</class>
+		<class>com.skilldistillery.jobtracker.entities.Skill</class>
 		<class>com.skilldistillery.jobtracker.entities.User</class>
 
 		<properties>

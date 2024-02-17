@@ -14,10 +14,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-public class UserTest {
+public class JobTest {
 	private static EntityManagerFactory emf;
 	private EntityManager em;
-	private User user;
+	private Job job;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -32,7 +32,7 @@ public class UserTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		em = emf.createEntityManager();
-		user = em.find(User.class, 1);
+		job = em.find(Job.class, 1);
 	}
 
 	@AfterEach
@@ -41,36 +41,27 @@ public class UserTest {
 	}
 
 	@Test
-	void test_User_entity_mapping() {
-		assertNotNull(user);
-		assertEquals("johnellewalker@gmail.com", user.getEmail());
-
-	}
-
-	@Test
-	void test_User_Preferences_mapping() {
-		assertNotNull(user);
-		assertEquals(70, user.getPreferences().getSalaryImportance());
-
-	}
-
-	@Test
-	void test_User_Skills_mapping() {
-		assertNotNull(user);
-		assertTrue(user.getSkills().size() == 14);
-
-	}
-
-	@Test
-	void test_User_Job_mapping() {
-		assertNotNull(user);
-		assertEquals("Northrop Grumman", user.getJobs().get(0).getCompany());
+	void test_Job_entity_mapping() {
+		assertNotNull(job);
+		assertEquals(121600, job.getMaxSalary());
 
 	}
 	@Test
-	void test_User_Location_mapping() {
-		assertNotNull(user);
-		assertEquals("80237", user.getLocation().getPostalCode());
+	void test_Job_User_entity_mapping() {
+		assertNotNull(job);
+		assertEquals("Johnelle", job.getUsers().get(0).getFirstName());
+		
+	}
+	@Test
+	void test_Job_Location_entity_mapping() {
+		assertNotNull(job);
+		assertEquals("Aurora", job.getLocation().getCity());
+		
+	}
+	@Test
+	void test_Job_Skills_entity_mapping() {
+		assertNotNull(job);
+		assertTrue(job.getSkills().size() == 8);
 		
 	}
 

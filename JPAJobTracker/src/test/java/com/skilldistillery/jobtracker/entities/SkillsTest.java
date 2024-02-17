@@ -1,6 +1,7 @@
 package com.skilldistillery.jobtracker.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -14,10 +15,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-public class UserTest {
+public class SkillsTest {
 	private static EntityManagerFactory emf;
 	private EntityManager em;
-	private User user;
+	private Skill skill;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -32,7 +33,7 @@ public class UserTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		em = emf.createEntityManager();
-		user = em.find(User.class, 1);
+		skill = em.find(Skill.class, 1);
 	}
 
 	@AfterEach
@@ -41,36 +42,22 @@ public class UserTest {
 	}
 
 	@Test
-	void test_User_entity_mapping() {
-		assertNotNull(user);
-		assertEquals("johnellewalker@gmail.com", user.getEmail());
-
-	}
-
-	@Test
-	void test_User_Preferences_mapping() {
-		assertNotNull(user);
-		assertEquals(70, user.getPreferences().getSalaryImportance());
-
-	}
-
-	@Test
-	void test_User_Skills_mapping() {
-		assertNotNull(user);
-		assertTrue(user.getSkills().size() == 14);
-
-	}
-
-	@Test
-	void test_User_Job_mapping() {
-		assertNotNull(user);
-		assertEquals("Northrop Grumman", user.getJobs().get(0).getCompany());
+	void test_Skill_entity_mapping() {
+		assertNotNull(skill);
+		assertEquals("Python", skill.getName());
 
 	}
 	@Test
-	void test_User_Location_mapping() {
-		assertNotNull(user);
-		assertEquals("80237", user.getLocation().getPostalCode());
+	void test_Skill_Job_entity_mapping() {
+		assertNotNull(skill);
+		assertTrue(skill.getJobs().size() == 1);
+		assertFalse(skill.getJobs().size() > 1);
+		
+	}
+	@Test
+	void test_Skill_User_entity_mapping() {
+		assertNotNull(skill);
+		assertTrue(skill.getUsers().size() == 1);
 		
 	}
 
