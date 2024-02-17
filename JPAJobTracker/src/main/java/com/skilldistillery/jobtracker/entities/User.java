@@ -37,11 +37,15 @@ public class User {
 	@OneToOne
 	@JoinColumn(name = "preferences_id")
 	private Preferences preferences;
+
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
-	private List<Match> matches;
+	private List<JobMatch> jobMatches;
+	
 	@OneToOne
 	@JoinColumn(name = "location_id")
 	private Location location;
+	
 	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "user_has_job", 
@@ -49,6 +53,7 @@ public class User {
 	inverseJoinColumns = @JoinColumn(name = "job_id"))
 	private List<Job> jobs;
 	
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "user_has_skills", 
 	joinColumns = @JoinColumn(name = "user_id"), 
@@ -139,34 +144,34 @@ public class User {
 		this.preferences = preferences;
 	}
 
-	public List<Match> getMatches() {
-		return matches;
+	public List<JobMatch> getJobMatches() {
+		return jobMatches;
 	}
 
-	public void setMatches(List<Match> matches) {
-		this.matches = matches;
+	public void setJobMatches(List<JobMatch> jobMatches) {
+		this.jobMatches = jobMatches;
 	}
 
-	public void addMatch(Match match) {
-		if (matches == null) {
-			matches = new ArrayList<>();
+	public void addJobMatch(JobMatch jobMatch) {
+		if (jobMatches == null) {
+			jobMatches = new ArrayList<>();
 		}
 
-		if (!matches.contains(match)) {
-			matches.add(match);
+		if (!jobMatches.contains(jobMatch)) {
+			jobMatches.add(jobMatch);
 		}
 
-		if (match.getUser() != null) {
-			match.getUser().removeMatch(match);
+		if (jobMatch.getUser() != null) {
+			jobMatch.getUser().removeJobMatch(jobMatch);
 
 		}
-		match.setUser(this);
+		jobMatch.setUser(this);
 	}
 
-	public void removeMatch(Match match) {
-		if (matches != null && matches.contains(match)) {
-			matches.remove(match);
-			match.setUser(null);
+	public void removeJobMatch(JobMatch jobMatch) {
+		if (jobMatches != null && jobMatches.contains(jobMatch)) {
+			jobMatches.remove(jobMatch);
+			jobMatch.setUser(null);
 		}
 	}
 
@@ -249,7 +254,7 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", password=" + password + ", employed=" + employed + ", role=" + role + ", clearance=" + clearance
-				+ ", education=" + education + ", preferences=" + preferences + ", matches=" + matches.size()
+				+ ", education=" + education + ", preferences=" + preferences + ", job matches=" + jobMatches.size()
 				+ ", location=" + location + "]";
 	}
 

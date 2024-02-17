@@ -21,9 +21,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User findUserById(int userId) {
-		Optional<User> optUser = userRepo.findById(userId);
-		return optUser.orElse(null);
+	public User findById(int userId) {
+		return userRepo.searchById(userId);
 	}
 
 	@Override
@@ -35,7 +34,7 @@ public class UserServiceImpl implements UserService {
 	public User updateUser(int userId, User user) {
 		Optional<User> optUser = userRepo.findById(userId);
 		if (optUser.isPresent()) {
-			user.setId(userId); 
+			user.setId(userId);
 			return userRepo.saveAndFlush(user);
 		}
 		return null;

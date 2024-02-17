@@ -7,7 +7,7 @@ import com.skilldistillery.jobtracker.entities.User;
 public interface UserService {
 	List<User> findAllUsers();
 
-	User findUserById(int userId);
+	User findById(int userId);
 
 	User createUser(User user);
 

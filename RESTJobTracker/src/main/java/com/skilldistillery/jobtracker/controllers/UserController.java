@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.skilldistillery.jobtracker.entities.User;
 import com.skilldistillery.jobtracker.services.UserService;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @RequestMapping("api")
 @RestController
 public class UserController {
@@ -22,28 +24,60 @@ public class UserController {
 	@Autowired
 	private UserService uS;
 
-	@GetMapping("users")
+	@GetMapping(path = {"users", "users/"})
 	public List<User> index() {
 		return uS.findAllUsers();
 	}
 
 	@GetMapping("users/{userId}")
-	public User getUserById(@PathVariable int userId) {
-		return uS.findUserById(userId);
+	public User show(@PathVariable("userId") int userId, HttpServletResponse rsp) {
+		User user = uS.findById(userId);
+
+		if (user == null) {
+			rsp.setStatus(404);
+		}
+		return user;
 	}
 
 	@PostMapping("users")
-	public User createUser(@RequestBody User user) {
-		return uS.createUser(user);
+	public User createUser(@RequestBody User user, HttpServletResponse rsp) {
+		User createdUser = uS.createUser(user);
+		if (createdUser == null) {
+			rsp.setStatus(404);
+		}
+		return createdUser;
 	}
 
 	@PutMapping("users/{userId}")
-	public User updateUser(@PathVariable int userId, @RequestBody User user) {
-		return uS.updateUser(userId, user);
+	public User updateUser(@PathVariable("userId") int userId, @RequestBody User user, HttpServletResponse rsp) {
+		try {
+			user = uS.updateUser(userId, user);
+			if (user == null) {
+				rsp.setStatus(404);
+			}
+		} catch (Exception e) {
+			rsp.setStatus(400);
+			user = null;
+			e.printStackTrace();
+		}
+		return user;
 	}
 
 	@DeleteMapping("users/{userId}")
-	public boolean deleteUser(@PathVariable int userId) {
-		return uS.deleteUser(userId);
+	public void deleteUser(@PathVariable("userId") int userId, HttpServletResponse rsp) {
+		User user = uS.findById(userId);
+
+		try {
+			if (user != null) {
+				uS.deleteUser(userId);
+				rsp.setStatus(204);
+			} else {
+				rsp.setStatus(404);
+			}
+		} catch (Exception e) {
+			rsp.setStatus(400);
+			e.printStackTrace();
+		}
 	}
+
 }

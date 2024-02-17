@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,8 +27,9 @@ public class Preferences {
 	@Column(name = "remote_work_importance")
 	private int remoteWorkImportance;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "preferences")
-	private List<Match> matches;
+	private List<JobMatch> jobMatches;
 
 	public Preferences() {
 
@@ -72,34 +75,34 @@ public class Preferences {
 		this.remoteWorkImportance = remoteWorkImportance;
 	}
 
-	public List<Match> getMatches() {
-		return matches;
+	public List<JobMatch> getJobMatches() {
+		return jobMatches;
 	}
 
-	public void setMatches(List<Match> matches) {
-		this.matches = matches;
+	public void setJobMatches(List<JobMatch> jobMatches) {
+		this.jobMatches = jobMatches;
 	}
 
-	public void addMatch(Match match) {
-		if (matches == null) {
-			matches = new ArrayList<>();
+	public void addMatch(JobMatch jobMatch) {
+		if (jobMatches == null) {
+			jobMatches = new ArrayList<>();
 		}
 
-		if (!matches.contains(match)) {
-			matches.add(match);
+		if (!jobMatches.contains(jobMatch)) {
+			jobMatches.add(jobMatch);
 		}
 
-		if (match.getPreferences() != null) {
-			match.getPreferences().removeMatch(match);
+		if (jobMatch.getPreferences() != null) {
+			jobMatch.getPreferences().removeMatch(jobMatch);
 
 		}
-		match.setPreferences(this);
+		jobMatch.setPreferences(this);
 	}
 
-	public void removeMatch(Match match) {
-		if (matches != null && matches.contains(match)) {
-			matches.remove(match);
-			match.setPreferences(null);
+	public void removeMatch(JobMatch jobMatch) {
+		if (jobMatches != null && jobMatches.contains(jobMatch)) {
+			jobMatches.remove(jobMatch);
+			jobMatch.setPreferences(null);
 		}
 	}
 
@@ -124,7 +127,8 @@ public class Preferences {
 	public String toString() {
 		return "Preferences [id=" + id + ", salaryImportance=" + salaryImportance + ", locationImportance="
 				+ locationImportance + ", benefitsImportance=" + benefitsImportance + ", remoteWorkImportance="
-				+ remoteWorkImportance + ", matches=" + matches + "]";
+				+ remoteWorkImportance + ", jobMatches=" + jobMatches.size() + "]";
 	}
+
 
 }

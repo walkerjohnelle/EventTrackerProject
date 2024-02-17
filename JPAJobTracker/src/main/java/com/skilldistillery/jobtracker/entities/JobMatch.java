@@ -9,15 +9,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
-public class Match {
+@Table(name = "job_match")
+public class JobMatch {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@Column(name = "match_score")
-	private double matchScore;
+	@Column(name = "job_match_score")
+	private double jobMatchScore;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -39,12 +41,12 @@ public class Match {
 		this.id = id;
 	}
 
-	public double getMatchScore() {
-		return matchScore;
+	public double getJobMatchScore() {
+		return jobMatchScore;
 	}
 
-	public void setMatchScore(double matchScore) {
-		this.matchScore = matchScore;
+	public void setJobMatchScore(double jobMatchScore) {
+		this.jobMatchScore = jobMatchScore;
 	}
 
 	public User getUser() {
@@ -84,14 +86,15 @@ public class Match {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Match other = (Match) obj;
+		JobMatch other = (JobMatch) obj;
 		return id == other.id;
 	}
 
 	@Override
 	public String toString() {
-		return "Match [id=" + id + ", matchScore=" + matchScore + ", user=" + user + ", job=" + job + ", preferences="
-				+ preferences + "]";
+		return "JobMatch [id=" + id + ", jobMatchScore=" + jobMatchScore + ", user=" + user + ", job=" + job
+				+ ", preferences=" + preferences + "]";
 	}
+
 
 }

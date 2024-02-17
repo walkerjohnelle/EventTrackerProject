@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -53,14 +55,16 @@ public class Job {
 	@ManyToMany(mappedBy = "jobs")
 	private List<User> users;
 
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "job_has_skills", 
 	joinColumns = @JoinColumn(name = "job_id"), 
 	inverseJoinColumns = @JoinColumn(name = "skill_id"))
 	private List<Skill> skills;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "job")
-	private List<Match> matches;
+	private List<JobMatch> jobMatches;
 
 	public Job() {
 
@@ -245,34 +249,34 @@ public class Job {
 		this.location = location;
 	}
 
-	public List<Match> getMatches() {
-		return matches;
+	public List<JobMatch> getJobMatches() {
+		return jobMatches;
 	}
 
-	public void setMatches(List<Match> matches) {
-		this.matches = matches;
+	public void setJobMatches(List<JobMatch> jobMatches) {
+		this.jobMatches = jobMatches;
 	}
 
-	public void addMatch(Match match) {
-		if (matches == null) {
-			matches = new ArrayList<>();
+	public void addJobMatch(JobMatch jobMatch) {
+		if (jobMatches == null) {
+			jobMatches = new ArrayList<>();
 		}
 
-		if (!matches.contains(match)) {
-			matches.add(match);
+		if (!jobMatches.contains(jobMatch)) {
+			jobMatches.add(jobMatch);
 		}
 
-		if (match.getUser() != null) {
-			match.getUser().removeMatch(match);
+		if (jobMatch.getUser() != null) {
+			jobMatch.getUser().removeJobMatch(jobMatch);
 
 		}
-		match.setJob(this);
+		jobMatch.setJob(this);
 	}
 
-	public void removeMatch(Match match) {
-		if (matches != null && matches.contains(match)) {
-			matches.remove(match);
-			match.setJob(null);
+	public void removeJobMatch(JobMatch jobMatch) {
+		if (jobMatches != null && jobMatches.contains(jobMatch)) {
+			jobMatches.remove(jobMatch);
+			jobMatch.setJob(null);
 		}
 	}
 
@@ -300,8 +304,9 @@ public class Job {
 				+ ", maxExperience=" + maxExperience + ", datePosted=" + datePosted + ", applicationDate="
 				+ applicationDate + ", applicationStatus=" + applicationStatus + ", contactInfo=" + contactInfo
 				+ ", jobListing=" + jobListing + ", clearance=" + clearance + ", remoteOrHybridOption="
-				+ remoteOrHybridOption + ", location=" + location + ", users=" + users.size() + ", skills="
-				+ skills.size() + "]";
+				+ remoteOrHybridOption + ", location=" + location + ", users=" + users.size() + ", skills=" + skills.size()
+				+ ", jobMatches=" + jobMatches.size() + "]";
 	}
 
+	
 }

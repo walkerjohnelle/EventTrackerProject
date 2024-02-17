@@ -113,13 +113,13 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `match`
+-- Table `job_match`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `match` ;
+DROP TABLE IF EXISTS `job_match` ;
 
-CREATE TABLE IF NOT EXISTS `match` (
+CREATE TABLE IF NOT EXISTS `job_match` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `match_score` DECIMAL NULL,
+  `job_match_score` DECIMAL NULL,
   `preferences_id` INT NOT NULL,
   `job_id` INT NOT NULL,
   `user_id` INT NOT NULL,
