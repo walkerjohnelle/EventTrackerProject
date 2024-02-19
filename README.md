@@ -16,9 +16,9 @@ The **EventTrackerProject** is a solo project that revolves something that I and
 
 ### Deployment
 
-The project and the associated database are deployed to an AWS instance.
+The project and the associated database are deployed to an AWS instance. Don't forget to include the endpoints for testing as the project is still a work in progress.
 
-**[Access the deployed application here. Don't forget to include the endpoints for testing as the project is still a work in progress.](http://18.190.80.171:8080/RESTJobTracker/)**
+**[Access the deployed application here](http://18.190.80.171:8080/RESTJobTracker/)**
 
 ## REST API Endpoints
 
