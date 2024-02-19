@@ -1,5 +1,7 @@
 # EventTrackerProject
 
+<img src="https://cdn.aarp.net/content/aarpe/en/home/work/job-search/find-job-openings/_jcr_content/root/container_main/container_body_main/container_image/articlecontentfragme/cfimage.coreimg.75.1320.jpeg/content/dam/aarp/work/job-search/2020/08/1140-new-job-keyboard.jpg" alt="Job Search" width="550">
+
 ## Overview
 
 The **EventTrackerProject** is a solo project that revolves something that I and all of my fellow classmates will have to conquer very soon, looking for a job! I wanted this project to be something that not only I, but my fellow classmates could use when the time came. The goal of this project is to be an application where job seekers can input the data of potential employers such as salary range, location, remote work possibilities, skills required, etc.; as well as what is important to the user in order to rank jobs based on fit so that the job seeker can prioritize jobs on their job search. 
@@ -16,7 +18,7 @@ The **EventTrackerProject** is a solo project that revolves something that I and
 
 The project and the associated database are deployed to an AWS instance.
 
-**[Access the deployed application here](http://18.190.80.171:8080/RESTJobTracker/)**
+**[Access the deployed application here. Don't forget to include the endpoints for testing as the project is still a work in progress.](http://18.190.80.171:8080/RESTJobTracker/)**
 
 ## REST API Endpoints
 
