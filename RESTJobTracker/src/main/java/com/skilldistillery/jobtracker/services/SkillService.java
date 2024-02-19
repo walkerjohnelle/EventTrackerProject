@@ -9,6 +9,10 @@ public interface SkillService {
 
 	Skill findById(int skillId);
 
+	List<Skill> getUserSkills(int userId);
+
+	List<Skill> getJobRequiredSkills(int jobId);
+
 	Skill createSkill(Skill skill);
 
 	Skill updateSkill(int skillId, Skill skill);

@@ -42,15 +42,17 @@ The project and the associated database are deployed to an AWS instance. Don't f
 | /api/users/{id}          | PUT         | Update an existing user               |
 | /api/users/{id}          | DELETE      | Delete a user by ID                   |
 
-### Skills Endpoints
+## Skills Endpoints
 
-| Endpoint                 | HTTP Method | Description                           |
-|--------------------------|-------------|---------------------------------------|
-| /api/skills              | GET         | Retrieve all skills                   |
-| /api/skills/{id}         | GET         | Retrieve a skill by ID                |
-| /api/skills              | POST        | Create a new skill                    |
-| /api/skills/{id}         | PUT         | Update an existing skill              |
-| /api/skills/{id}         | DELETE      | Delete a skill by ID                  |
+| Endpoint                      | HTTP Method | Description                                        |
+|-------------------------------|-------------|----------------------------------------------------|
+| /api/skills                   | GET         | Retrieve all skills stored in the database         |
+| /api/skills/{id}              | GET         | Retrieve a skill by its ID                         |
+| /api/users/{userId}/skills    | GET         | Retrieve all skills associated with a user         |
+| /api/jobs/{jobId}/skills      | GET         | Retrieve all skills required for a job             |
+| /api/skills                   | POST        | Create a new skill entry in the database           |
+| /api/skills/{id}              | PUT         | Update an existing skill entry in the database     |
+| /api/skills/{id}              | DELETE      | Delete a skill entry from the database by its ID   |
 
 ### Endpoint Details
 
@@ -112,6 +114,16 @@ The project and the associated database are deployed to an AWS instance. Don't f
   - Description: Retrieves a specific skill by its ID.
   - Parameters: `{id}` - The unique identifier of the skill.
   - Response: Returns a JSON object containing details of the specified skill if found.
+
+- **GET /api/users/{userId}/skills:** 
+  - Description: Retrieves all skills associated with a user.
+  - Parameters: `{userId}` - The unique identifier of the user.
+  - Response: Returns a JSON array containing details of all skills associated with the user if found.
+
+- **GET /api/jobs/{jobId}/skills:** 
+  - Description: Retrieves all skills required for a job.
+  - Parameters: `{jobId}` - The unique identifier of the job.
+  - Response: Returns a JSON array containing details of all skills required for the job if found.
 
 - **POST /api/skills:** 
   - Description: Creates a new skill entry in the database.

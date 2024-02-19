@@ -39,6 +39,24 @@ public class SkillController {
 		return skill;
 	}
 
+	@GetMapping("users/{userId}/skills")
+	public List<Skill> getUserSkills(@PathVariable("userId") int userId, HttpServletResponse rsp) {
+		List<Skill> userSkills = sS.getUserSkills(userId);
+		if (userSkills == null || userSkills.isEmpty()) {
+			rsp.setStatus(404);
+		}
+		return userSkills;
+	}
+
+	@GetMapping("jobs/{jobId}/skills")
+	public List<Skill> getJobRequiredSkills(@PathVariable("jobId") int jobId, HttpServletResponse rsp) {
+		List<Skill> jobSkills = sS.getJobRequiredSkills(jobId);
+		if (jobSkills == null || jobSkills.isEmpty()) {
+			rsp.setStatus(404);
+		}
+		return jobSkills;
+	}
+
 	@PostMapping("skills")
 	public Skill createSkill(@RequestBody Skill skill, HttpServletResponse rsp) {
 		Skill createdSkill = sS.createSkill(skill);
