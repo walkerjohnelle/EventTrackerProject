@@ -5,11 +5,14 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.skilldistillery.jobtracker.entities.Job;
+import com.skilldistillery.jobtracker.entities.User;
 import com.skilldistillery.jobtracker.repositories.JobRepository;
 
 @Service
+@Transactional
 public class JobServiceImpl implements JobService {
 
 	@Autowired
@@ -22,7 +25,8 @@ public class JobServiceImpl implements JobService {
 
 	@Override
 	public Job findById(int jobId) {
-		return jobRepo.searchById(jobId);
+		Optional<Job> optJob = jobRepo.findById(jobId);
+		return optJob.orElse(null);
 	}
 
 	@Override
@@ -44,7 +48,19 @@ public class JobServiceImpl implements JobService {
 	public boolean deleteJob(int jobId) {
 		Optional<Job> optJob = jobRepo.findById(jobId);
 		if (optJob.isPresent()) {
-			jobRepo.delete(optJob.get());
+			Job job = optJob.get();
+
+			List<User> users = job.getUsers();
+			if (users != null) {
+				for (User user : users) {
+					user.removeJob(job);
+				}
+			}
+
+			job.setSkills(null);
+
+			jobRepo.delete(job);
+
 			return true;
 		}
 		return false;

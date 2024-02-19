@@ -15,7 +15,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 
 @Entity
 public class User {
@@ -33,31 +32,28 @@ public class User {
 	private String role;
 	private String clearance;
 	private String education;
-
-	@OneToOne
-	@JoinColumn(name = "preferences_id")
-	private Preferences preferences;
+	private String location;
+	@Column(name = "salary_importance")
+	private int salaryImportance;
+	@Column(name = "location_importance")
+	private int locationImportance;
+	@Column(name = "benefits_importance")
+	private int benefitsImportance;
+	@Column(name = "remote_work_importance")
+	private int remoteWorkImportance;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<JobMatch> jobMatches;
-	
-	@OneToOne
-	@JoinColumn(name = "location_id")
-	private Location location;
-	
+
 	@JsonIgnore
 	@ManyToMany
-	@JoinTable(name = "user_has_job", 
-	joinColumns = @JoinColumn(name = "user_id"), 
-	inverseJoinColumns = @JoinColumn(name = "job_id"))
+	@JoinTable(name = "user_has_job", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "job_id"))
 	private List<Job> jobs;
-	
+
 	@JsonIgnore
 	@ManyToMany
-	@JoinTable(name = "user_has_skills", 
-	joinColumns = @JoinColumn(name = "user_id"), 
-	inverseJoinColumns = @JoinColumn(name = "skill_id"))
+	@JoinTable(name = "user_has_skills", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
 	private List<Skill> skills;
 
 	public User() {
@@ -136,14 +132,6 @@ public class User {
 		this.education = education;
 	}
 
-	public Preferences getPreferences() {
-		return preferences;
-	}
-
-	public void setPreferences(Preferences preferences) {
-		this.preferences = preferences;
-	}
-
 	public List<JobMatch> getJobMatches() {
 		return jobMatches;
 	}
@@ -175,11 +163,43 @@ public class User {
 		}
 	}
 
-	public Location getLocation() {
+	public int getSalaryImportance() {
+		return salaryImportance;
+	}
+
+	public void setSalaryImportance(int salaryImportance) {
+		this.salaryImportance = salaryImportance;
+	}
+
+	public int getLocationImportance() {
+		return locationImportance;
+	}
+
+	public void setLocationImportance(int locationImportance) {
+		this.locationImportance = locationImportance;
+	}
+
+	public int getBenefitsImportance() {
+		return benefitsImportance;
+	}
+
+	public void setBenefitsImportance(int benefitsImportance) {
+		this.benefitsImportance = benefitsImportance;
+	}
+
+	public int getRemoteWorkImportance() {
+		return remoteWorkImportance;
+	}
+
+	public void setRemoteWorkImportance(int remoteWorkImportance) {
+		this.remoteWorkImportance = remoteWorkImportance;
+	}
+
+	public String getLocation() {
 		return location;
 	}
 
-	public void setLocation(Location location) {
+	public void setLocation(String location) {
 		this.location = location;
 	}
 
@@ -216,6 +236,7 @@ public class User {
 	public void setSkills(List<Skill> skills) {
 		this.skills = skills;
 	}
+
 	public void addSkill(Skill skill) {
 		if (skills == null) {
 			skills = new ArrayList<>();
@@ -233,6 +254,7 @@ public class User {
 			skill.removeUser(this);
 		}
 	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -254,8 +276,10 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", password=" + password + ", employed=" + employed + ", role=" + role + ", clearance=" + clearance
-				+ ", education=" + education + ", preferences=" + preferences + ", job matches=" + jobMatches.size()
-				+ ", location=" + location + "]";
+				+ ", education=" + education + ", location=" + location + ", salaryImportance=" + salaryImportance
+				+ ", locationImportance=" + locationImportance + ", benefitsImportance=" + benefitsImportance
+				+ ", remoteWorkImportance=" + remoteWorkImportance + ", jobMatches=" + jobMatches.size() + ", jobs="
+				+ jobs.size() + ", skills=" + skills.size() + "]";
 	}
 
 }

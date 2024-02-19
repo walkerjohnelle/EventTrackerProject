@@ -40,7 +40,7 @@ public class JobController {
 	}
 
 	@PostMapping("jobs")
-	public Job createUser(@RequestBody Job job, HttpServletResponse rsp) {
+	public Job createJob(@RequestBody Job job, HttpServletResponse rsp) {
 		Job createdJob = jS.createJob(job);
 		if (createdJob == null) {
 			rsp.setStatus(404);

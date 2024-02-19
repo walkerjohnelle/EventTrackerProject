@@ -1,6 +1,5 @@
 package com.skilldistillery.jobtracker.entities;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,7 +15,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 
 @Entity
 public class Job {
@@ -34,11 +32,6 @@ public class Job {
 	private int minExperience;
 	@Column(name = "max_experience")
 	private int maxExperience;
-	@Column(name = "date_posted")
-	private LocalDateTime datePosted;
-	@Column(name = "application_date")
-	private LocalDateTime applicationDate;
-	@Column(name = "application_status")
 	private String applicationStatus;
 	@Column(name = "contact_info")
 	private String contactInfo;
@@ -47,19 +40,14 @@ public class Job {
 	private String clearance;
 	@Column(name = "remote_hybrid")
 	private boolean remoteOrHybridOption;
+	private String location;
 
-	@OneToOne
-	@JoinColumn(name = "location_id")
-	private Location location;
-	
 	@ManyToMany(mappedBy = "jobs")
 	private List<User> users;
 
 	@JsonIgnore
 	@ManyToMany
-	@JoinTable(name = "job_has_skills", 
-	joinColumns = @JoinColumn(name = "job_id"), 
-	inverseJoinColumns = @JoinColumn(name = "skill_id"))
+	@JoinTable(name = "job_has_skills", joinColumns = @JoinColumn(name = "job_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
 	private List<Skill> skills;
 
 	@JsonIgnore
@@ -132,22 +120,6 @@ public class Job {
 
 	public void setMaxExperience(int maxExperience) {
 		this.maxExperience = maxExperience;
-	}
-
-	public LocalDateTime getDatePosted() {
-		return datePosted;
-	}
-
-	public void setDatePosted(LocalDateTime datePosted) {
-		this.datePosted = datePosted;
-	}
-
-	public LocalDateTime getApplicationDate() {
-		return applicationDate;
-	}
-
-	public void setApplicationDate(LocalDateTime applicationDate) {
-		this.applicationDate = applicationDate;
 	}
 
 	public String getApplicationStatus() {
@@ -241,11 +213,11 @@ public class Job {
 		}
 	}
 
-	public Location getLocation() {
+	public String getLocation() {
 		return location;
 	}
 
-	public void setLocation(Location location) {
+	public void setLocation(String location) {
 		this.location = location;
 	}
 
@@ -301,12 +273,10 @@ public class Job {
 	public String toString() {
 		return "Job [id=" + id + ", title=" + title + ", company=" + company + ", minSalary=" + minSalary
 				+ ", maxSalary=" + maxSalary + ", education=" + education + ", minExperience=" + minExperience
-				+ ", maxExperience=" + maxExperience + ", datePosted=" + datePosted + ", applicationDate="
-				+ applicationDate + ", applicationStatus=" + applicationStatus + ", contactInfo=" + contactInfo
-				+ ", jobListing=" + jobListing + ", clearance=" + clearance + ", remoteOrHybridOption="
-				+ remoteOrHybridOption + ", location=" + location + ", users=" + users.size() + ", skills=" + skills.size()
-				+ ", jobMatches=" + jobMatches.size() + "]";
+				+ ", maxExperience=" + maxExperience + ", applicationStatus=" + applicationStatus + ", contactInfo="
+				+ contactInfo + ", jobListing=" + jobListing + ", clearance=" + clearance + ", remoteOrHybridOption="
+				+ remoteOrHybridOption + ", location=" + location + ", users=" + users.size() + ", skills="
+				+ skills.size() + ", jobMatches=" + jobMatches.size() + "]";
 	}
 
-	
 }

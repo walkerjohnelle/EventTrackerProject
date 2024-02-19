@@ -29,10 +29,6 @@ public class JobMatch {
 	@JoinColumn(name = "job_id")
 	private Job job;
 
-	@ManyToOne
-	@JoinColumn(name = "preferences_id")
-	private Preferences preferences;
-
 	public int getId() {
 		return id;
 	}
@@ -65,14 +61,6 @@ public class JobMatch {
 		this.job = job;
 	}
 
-	public Preferences getPreferences() {
-		return preferences;
-	}
-
-	public void setPreferences(Preferences preferences) {
-		this.preferences = preferences;
-	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -92,9 +80,7 @@ public class JobMatch {
 
 	@Override
 	public String toString() {
-		return "JobMatch [id=" + id + ", jobMatchScore=" + jobMatchScore + ", user=" + user + ", job=" + job
-				+ ", preferences=" + preferences + "]";
+		return "JobMatch [id=" + id + ", jobMatchScore=" + jobMatchScore + ", user=" + user + ", job=" + job + "]";
 	}
-
 
 }

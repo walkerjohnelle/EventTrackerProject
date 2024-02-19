@@ -23,6 +23,7 @@ public class UserController {
 
 	@Autowired
 	private UserService uS;
+	@Autowired 
 
 	@GetMapping(path = {"users", "users/"})
 	public List<User> index() {

@@ -53,12 +53,6 @@ public class JobTest {
 		
 	}
 	@Test
-	void test_Job_Location_entity_mapping() {
-		assertNotNull(job);
-		assertEquals("Aurora", job.getLocation().getCity());
-		
-	}
-	@Test
 	void test_Job_Skills_entity_mapping() {
 		assertNotNull(job);
 		assertTrue(job.getSkills().size() == 8);

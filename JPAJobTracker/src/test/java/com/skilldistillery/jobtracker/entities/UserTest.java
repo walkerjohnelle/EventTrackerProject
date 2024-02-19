@@ -48,13 +48,6 @@ public class UserTest {
 	}
 
 	@Test
-	void test_User_Preferences_mapping() {
-		assertNotNull(user);
-		assertEquals(70, user.getPreferences().getSalaryImportance());
-
-	}
-
-	@Test
 	void test_User_Skills_mapping() {
 		assertNotNull(user);
 		assertTrue(user.getSkills().size() == 14);
@@ -66,12 +59,6 @@ public class UserTest {
 		assertNotNull(user);
 		assertEquals("Northrop Grumman", user.getJobs().get(0).getCompany());
 
-	}
-	@Test
-	void test_User_Location_mapping() {
-		assertNotNull(user);
-		assertEquals("80237", user.getLocation().getPostalCode());
-		
 	}
 
 }
