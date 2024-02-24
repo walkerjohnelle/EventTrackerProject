@@ -39,6 +39,11 @@ public class JobMatchController {
 		return jMatch;
 	}
 
+	@GetMapping("users/{userId}/jobmatches")
+	public List<JobMatch> showUserJobMatches(@PathVariable("userId") int userId, HttpServletResponse rsp) {
+		return jmS.getJobMatchesByUserId(userId);
+	}
+	
 	@PostMapping("jobmatches")
 	public JobMatch createJobMatch(@RequestBody JobMatch jMatch, HttpServletResponse rsp) {
 		JobMatch createdJM = jmS.createJobMatch(jMatch);
@@ -81,6 +86,4 @@ public class JobMatchController {
 		}
 	}
 
-	
-	
 }

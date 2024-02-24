@@ -28,13 +28,13 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` VARCHAR(45) NOT NULL,
   `employed` TINYINT NOT NULL,
   `role` VARCHAR(45) NOT NULL,
-  `clearance` VARCHAR(45) NULL,
-  `education` VARCHAR(100) NULL,
-  `location` VARCHAR(250) NULL,
-  `salary_importance` INT NULL,
-  `location_importance` INT NULL,
-  `benefits_importance` INT NULL,
-  `remote_work_importance` INT NULL,
+  `clearance` VARCHAR(45) NOT NULL,
+  `education` VARCHAR(100) NOT NULL,
+  `location` VARCHAR(250) NOT NULL,
+  `experience` INT NOT NULL,
+  `min_salary` DECIMAL(10,2) NOT NULL,
+  `max_salary` DECIMAL(10,2) NOT NULL,
+  `remote_work_desired` TINYINT NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -70,8 +70,7 @@ DROP TABLE IF EXISTS `job_match` ;
 
 CREATE TABLE IF NOT EXISTS `job_match` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `job_match_score` DECIMAL NULL,
-  `preferences_id` INT NOT NULL,
+  `job_match_score` DECIMAL NULL DEFAULT 0.0,
   `job_id` INT NOT NULL,
   `user_id` INT NOT NULL,
   PRIMARY KEY (`id`),
@@ -189,7 +188,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `jobtrackerdb`;
-INSERT INTO `user` (`id`, `email`, `first_name`, `last_name`, `password`, `employed`, `role`, `clearance`, `education`, `location`, `salary_importance`, `location_importance`, `benefits_importance`, `remote_work_importance`) VALUES (1, 'johnellewalker@gmail.com', 'Johnelle', 'Walker', 'password', 2, 'admin', 'TS/SCI', 'Bachelor\'s degree', '6715 E Union Ave, Denver CO, 80237', 70, 20, 5, 5);
+INSERT INTO `user` (`id`, `email`, `first_name`, `last_name`, `password`, `employed`, `role`, `clearance`, `education`, `location`, `experience`, `min_salary`, `max_salary`, `remote_work_desired`) VALUES (1, 'johnellewalker@gmail.com', 'Johnelle', 'Walker', 'password', 1, 'admin', 'TS/SCI', 'Bachelor\'s degree', '6715 E Union Ave, Denver CO, 80237', 0, 65000.0, 100000.0, 2);
 
 COMMIT;
 
@@ -199,7 +198,17 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `jobtrackerdb`;
-INSERT INTO `job` (`id`, `title`, `company`, `min_salary`, `max_salary`, `education`, `min_experience`, `max_experience`, `application_status`, `contact_info`, `job_listing`, `clearance`, `remote_hybrid`, `location`) VALUES (1, 'Software Developer', 'Northrop Grumman', 81000, 121600, 'Bachelor’s degree', 2, 4, NULL, NULL, 'https://www.northropgrumman.com/jobs/Engineering/Software/United-States-of-America/Colorado/Aurora/R10106447/northrop-grumman-dod-skillbridge-engineer-softwareprincipal-engineer-software-active-top-secretsci-c', 'TS/SCI with CI Poly', 2, '2');
+INSERT INTO `job` (`id`, `title`, `company`, `min_salary`, `max_salary`, `education`, `min_experience`, `max_experience`, `application_status`, `contact_info`, `job_listing`, `clearance`, `remote_hybrid`, `location`) VALUES (1, 'Software Developer', 'Northrop Grumman', 81000, 121600, 'Bachelor’s degree', 2, 4, NULL, NULL, 'https://www.northropgrumman.com/jobs/Engineering/Software/United-States-of-America/Colorado/Aurora/R10106447/northrop-grumman-dod-skillbridge-engineer-softwareprincipal-engineer-software-active-top-secretsci-c', 'TS/SCI with CI Poly', 2, '');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `job_match`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `jobtrackerdb`;
+INSERT INTO `job_match` (`id`, `job_match_score`, `job_id`, `user_id`) VALUES (1, NULL, 1, 1);
 
 COMMIT;
 

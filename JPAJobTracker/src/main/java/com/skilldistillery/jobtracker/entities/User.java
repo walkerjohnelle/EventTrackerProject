@@ -33,14 +33,13 @@ public class User {
 	private String clearance;
 	private String education;
 	private String location;
-	@Column(name = "salary_importance")
-	private int salaryImportance;
-	@Column(name = "location_importance")
-	private int locationImportance;
-	@Column(name = "benefits_importance")
-	private int benefitsImportance;
-	@Column(name = "remote_work_importance")
-	private int remoteWorkImportance;
+	private int experience;
+	@Column(name = "min_salary")
+	private double minSalary;
+	@Column(name = "max_salary")
+	private double maxSalary;
+	@Column(name = "remote_work_desired")
+	private boolean remoteWorkDesired;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
@@ -48,12 +47,16 @@ public class User {
 
 	@JsonIgnore
 	@ManyToMany
-	@JoinTable(name = "user_has_job", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "job_id"))
+	@JoinTable(name = "user_has_job", 
+	joinColumns = @JoinColumn(name = "user_id"), 
+	inverseJoinColumns = @JoinColumn(name = "job_id"))
 	private List<Job> jobs;
 
 	@JsonIgnore
 	@ManyToMany
-	@JoinTable(name = "user_has_skills", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
+	@JoinTable(name = "user_has_skills", 
+	joinColumns = @JoinColumn(name = "user_id"), 
+	inverseJoinColumns = @JoinColumn(name = "skill_id"))
 	private List<Skill> skills;
 
 	public User() {
@@ -163,38 +166,6 @@ public class User {
 		}
 	}
 
-	public int getSalaryImportance() {
-		return salaryImportance;
-	}
-
-	public void setSalaryImportance(int salaryImportance) {
-		this.salaryImportance = salaryImportance;
-	}
-
-	public int getLocationImportance() {
-		return locationImportance;
-	}
-
-	public void setLocationImportance(int locationImportance) {
-		this.locationImportance = locationImportance;
-	}
-
-	public int getBenefitsImportance() {
-		return benefitsImportance;
-	}
-
-	public void setBenefitsImportance(int benefitsImportance) {
-		this.benefitsImportance = benefitsImportance;
-	}
-
-	public int getRemoteWorkImportance() {
-		return remoteWorkImportance;
-	}
-
-	public void setRemoteWorkImportance(int remoteWorkImportance) {
-		this.remoteWorkImportance = remoteWorkImportance;
-	}
-
 	public String getLocation() {
 		return location;
 	}
@@ -255,6 +226,38 @@ public class User {
 		}
 	}
 
+	public int getExperience() {
+		return experience;
+	}
+
+	public void setExperience(int experience) {
+		this.experience = experience;
+	}
+
+	public double getMinSalary() {
+		return minSalary;
+	}
+
+	public void setMinSalary(double minSalary) {
+		this.minSalary = minSalary;
+	}
+
+	public double getMaxSalary() {
+		return maxSalary;
+	}
+
+	public void setMaxSalary(double maxSalary) {
+		this.maxSalary = maxSalary;
+	}
+
+	public boolean isRemoteWorkDesired() {
+		return remoteWorkDesired;
+	}
+
+	public void setRemoteWorkDesired(boolean remoteWorkDesired) {
+		this.remoteWorkDesired = remoteWorkDesired;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -276,10 +279,9 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", password=" + password + ", employed=" + employed + ", role=" + role + ", clearance=" + clearance
-				+ ", education=" + education + ", location=" + location + ", salaryImportance=" + salaryImportance
-				+ ", locationImportance=" + locationImportance + ", benefitsImportance=" + benefitsImportance
-				+ ", remoteWorkImportance=" + remoteWorkImportance + ", jobMatches=" + jobMatches.size() + ", jobs="
-				+ jobs.size() + ", skills=" + skills.size() + "]";
+				+ ", education=" + education + ", location=" + location + ", experience=" + experience
+				+ ", minSalary=" + minSalary + ", maxSalary=" + maxSalary + ", remoteWorkDesired=" + remoteWorkDesired 
+				+ ", jobMatches=" + jobMatches.size() + ", jobs=" + jobs.size()	+ ", skills=" + skills.size() + "]";
 	}
 
 }

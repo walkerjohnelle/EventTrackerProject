@@ -19,7 +19,7 @@ public class JobMatch {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@Column(name = "job_match_score")
-	private double jobMatchScore;
+	private Double jobMatchScore;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")

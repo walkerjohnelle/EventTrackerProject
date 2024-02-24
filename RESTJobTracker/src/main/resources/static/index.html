@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Tracker</title>
+</head>
+<body>
+    <h1>Job Tracker</h1>
+    <table id="jobTable">
+        <!-- Table will be populated dynamically by script.js -->
+    </table>
+
+    <!-- Add form for creating and updating jobs -->
+    <form id="jobForm">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title"><br><br>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea><br><br>
+        <button id="createBtn" type="submit">Create Job</button>
+        <button id="updateBtn" type="button" style="display: none;">Update Job</button>
+        <button id="cancelBtn" type="button" style="display: none;">Cancel</button>
+    </form>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

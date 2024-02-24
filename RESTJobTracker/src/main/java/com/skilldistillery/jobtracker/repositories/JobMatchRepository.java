@@ -6,4 +6,6 @@ import com.skilldistillery.jobtracker.entities.JobMatch;
 
 public interface JobMatchRepository extends JpaRepository<JobMatch, Integer> {
 	JobMatch searchById(int jobMId);
+	
+	JobMatch searchByUserId(int userId);
 }

@@ -18,5 +18,7 @@ public interface JobMatchService {
 	boolean deleteJobMatch(int jobMId);
 	
 	double calculateMatchScore(User user, Job job);
+	
+	List<JobMatch> getJobMatchesByUserId(int userId);
 
 }
