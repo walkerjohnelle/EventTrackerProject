@@ -1,10 +1,10 @@
-package com.skilldistillery.jobtracker;
+package com.skilldistillery.tvtracker;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RestJobTrackerApplicationTests {
+class RestTvTrackerApplicationTests {
 
 	@Test
 	void contextLoads() {

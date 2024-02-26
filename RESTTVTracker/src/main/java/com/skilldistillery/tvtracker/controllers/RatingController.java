@@ -1,4 +1,4 @@
-package com.skilldistillery.jobtracker.controllers;
+package com.skilldistillery.tvtracker.controllers;
 
 import java.util.List;
 
@@ -12,82 +12,76 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.skilldistillery.jobtracker.entities.Skill;
-import com.skilldistillery.jobtracker.services.SkillService;
+import com.skilldistillery.tvtracker.entities.Rating;
+import com.skilldistillery.tvtracker.services.RatingService;
 
 import jakarta.servlet.http.HttpServletResponse;
 
 @RequestMapping("api")
 @RestController
-public class SkillController {
+public class RatingController {
 
 	@Autowired
-	private SkillService sS;
+	private RatingService rS;
 
-	@GetMapping(path = { "skills", "skills/" })
-	public List<Skill> index() {
-		return sS.findAllSkills();
+	@GetMapping(path = { "ratings", "ratings/" })
+	public List<Rating> index() {
+		return rS.findAllRatings();
 	}
 
-	@GetMapping("skills/{skillId}")
-	public Skill show(@PathVariable("skillId") int skillId, HttpServletResponse rsp) {
-		Skill skill = sS.findById(skillId);
+	@GetMapping("ratings/{ratingId}")
+	public Rating show(@PathVariable("ratingId") int ratingId, HttpServletResponse rsp) {
+		Rating rating = rS.findById(ratingId);
 
-		if (skill == null) {
+		if (rating == null) {
 			rsp.setStatus(404);
 		}
-		return skill;
+		return rating;
 	}
 
-	@GetMapping("users/{userId}/skills")
-	public List<Skill> getUserSkills(@PathVariable("userId") int userId, HttpServletResponse rsp) {
-		List<Skill> userSkills = sS.getUserSkills(userId);
-		if (userSkills == null || userSkills.isEmpty()) {
+	@GetMapping("users/{userId}/ratings")
+	public List<Rating> getUserRatings(@PathVariable("userId") int userId, HttpServletResponse rsp) {
+		List<Rating> userRatings = rS.getUserRatings(userId);
+		if (userRatings == null || userRatings.isEmpty()) {
 			rsp.setStatus(404);
 		}
-		return userSkills;
+		return userRatings;
 	}
 
-	@GetMapping("jobs/{jobId}/skills")
-	public List<Skill> getJobRequiredSkills(@PathVariable("jobId") int jobId, HttpServletResponse rsp) {
-		List<Skill> jobSkills = sS.getJobRequiredSkills(jobId);
-		if (jobSkills == null || jobSkills.isEmpty()) {
+	@PostMapping("ratings/shows/{showId}")
+	public Rating createRating(@PathVariable("showId") int showId, @RequestBody Rating rating,
+			HttpServletResponse rsp) {
+
+		Rating createdRating = rS.createRating(showId, rating); // Corrected method call
+		if (createdRating == null) {
 			rsp.setStatus(404);
 		}
-		return jobSkills;
+		return createdRating;
 	}
 
-	@PostMapping("skills")
-	public Skill createSkill(@RequestBody Skill skill, HttpServletResponse rsp) {
-		Skill createdSkill = sS.createSkill(skill);
-		if (createdSkill == null) {
-			rsp.setStatus(404);
-		}
-		return createdSkill;
-	}
-
-	@PutMapping("skills/{skillId}")
-	public Skill updateSkill(@PathVariable("skillId") int skillId, @RequestBody Skill skill, HttpServletResponse rsp) {
+	@PutMapping("ratings/{ratingId}")
+	public Rating updateRating(@PathVariable("ratingId") int ratingId, @RequestBody Rating rating,
+			HttpServletResponse rsp) {
 		try {
-			skill = sS.updateSkill(skillId, skill);
-			if (skill == null) {
+			rating = rS.updateRating(ratingId, rating);
+			if (rating == null) {
 				rsp.setStatus(404);
 			}
 		} catch (Exception e) {
 			rsp.setStatus(400);
-			skill = null;
+			rating = null;
 			e.printStackTrace();
 		}
-		return skill;
+		return rating;
 	}
 
-	@DeleteMapping("skills/{skillId}")
-	public void deleteSkill(@PathVariable("skillId") int skillId, HttpServletResponse rsp) {
-		Skill skill = sS.findById(skillId);
+	@DeleteMapping("ratings/{ratingId}")
+	public void deleteRating(@PathVariable("ratingId") int ratingId, HttpServletResponse rsp) {
+		Rating rating = rS.findById(ratingId);
 
 		try {
-			if (skill != null) {
-				sS.deleteSkill(skillId);
+			if (rating != null) {
+				rS.deleteRating(ratingId);
 				rsp.setStatus(204);
 			} else {
 				rsp.setStatus(404);

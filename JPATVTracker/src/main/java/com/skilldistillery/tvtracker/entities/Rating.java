@@ -1,33 +1,39 @@
-package com.skilldistillery.jobtracker.entities;
+package com.skilldistillery.tvtracker.entities;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "job_match")
-public class JobMatch {
+public class Rating {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@Column(name = "job_match_score")
-	private Double jobMatchScore;
-
+	private int rating;
+	private String review;
+	
+	@JsonIgnore
+	@ManyToMany
+	@JoinTable(name = "tv_show_has_rating", 
+	joinColumns = @JoinColumn(name = "rating_id"), 
+	inverseJoinColumns = @JoinColumn(name = "tv_show_id"))
+	private List<TvShow> shows;
+	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-
-	@ManyToOne
-	@JoinColumn(name = "job_id")
-	private Job job;
 
 	public int getId() {
 		return id;
@@ -37,28 +43,54 @@ public class JobMatch {
 		this.id = id;
 	}
 
-	public double getJobMatchScore() {
-		return jobMatchScore;
+	public int getRating() {
+		return rating;
 	}
 
-	public void setJobMatchScore(double jobMatchScore) {
-		this.jobMatchScore = jobMatchScore;
+	public void setRating(int rating) {
+		this.rating = rating;
 	}
 
+	public String getReview() {
+		return review;
+	}
+
+	public void setReview(String review) {
+		this.review = review;
+	}
+
+	public List<TvShow> getShows() {
+		return shows;
+	}
+
+	public void setShows(List<TvShow> shows) {
+		this.shows = shows;
+	}
+
+	public void addShow(TvShow show) {
+		if(shows == null) {
+			shows = new ArrayList<>();
+		}
+		
+		if(!shows.contains(show)) {
+			shows.add(show);
+			show.addRating(this);
+		}
+	}
+	
+	public void removeShow(TvShow show) {
+		if(shows != null && shows.contains(show)) {
+			shows.remove(show);
+			show.removeRating(this);
+		}
+	}
+	
 	public User getUser() {
 		return user;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public Job getJob() {
-		return job;
-	}
-
-	public void setJob(Job job) {
-		this.job = job;
 	}
 
 	@Override
@@ -74,13 +106,13 @@ public class JobMatch {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JobMatch other = (JobMatch) obj;
+		Rating other = (Rating) obj;
 		return id == other.id;
 	}
 
 	@Override
 	public String toString() {
-		return "JobMatch [id=" + id + ", jobMatchScore=" + jobMatchScore + ", user=" + user + ", job=" + job + "]";
+		return "Rating [id=" + id + ", rating=" + rating + ", review=" + review + ", shows=" + shows.size() + "]";
 	}
 
 }

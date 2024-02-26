@@ -1,9 +1,7 @@
-package com.skilldistillery.jobtracker.entities;
+package com.skilldistillery.tvtracker.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -15,14 +13,14 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-public class SkillsTest {
+public class RatingTest {
 	private static EntityManagerFactory emf;
 	private EntityManager em;
-	private Skill skill;
+	private Rating rating;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		emf = Persistence.createEntityManagerFactory("JPAJobTracker");
+		emf = Persistence.createEntityManagerFactory("JPATvTracker");
 	}
 
 	@AfterAll
@@ -33,7 +31,7 @@ public class SkillsTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		em = emf.createEntityManager();
-		skill = em.find(Skill.class, 1);
+		rating = em.find(Rating.class, 1);
 	}
 
 	@AfterEach
@@ -42,22 +40,21 @@ public class SkillsTest {
 	}
 
 	@Test
-	void test_Skill_entity_mapping() {
-		assertNotNull(skill);
-		assertEquals("Python", skill.getName());
+	void test_Ratings_entity_mapping() {
+		assertNotNull(rating);
+		assertEquals(10, rating.getRating());
 
 	}
 	@Test
-	void test_Skill_Job_entity_mapping() {
-		assertNotNull(skill);
-		assertTrue(skill.getJobs().size() == 1);
-		assertFalse(skill.getJobs().size() > 1);
+	void test_Rating_User_entity_mapping() {
+		assertNotNull(rating);
+		assertEquals("walkerjohnelle", rating.getUser().getUsername());
 		
 	}
 	@Test
-	void test_Skill_User_entity_mapping() {
-		assertNotNull(skill);
-		assertTrue(skill.getUsers().size() == 1);
+	void test_Rating_TvShow_entity_mapping() {
+		assertNotNull(rating);
+		assertEquals("The Sapranos", rating.getShows().get(0).getTitle());
 		
 	}
 

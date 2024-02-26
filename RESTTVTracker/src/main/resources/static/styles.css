@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+ body {
+            background-color: #f8f9fa; /* Light grey background */
+        }
+
+        .container {
+            padding-top: 20px;
+        }
+
+        h2 {
+            color: #343a40; /* Dark grey text color */
+        }
+
+        th {
+            background-color: #343a40; /* Dark grey header background */
+            color: white; /* White text color */
+        }
+
+        td, th {
+            vertical-align: middle !important; /* Center-align table content */
+        }
+
+        #tvShowTable, #ratingTable {
+            margin-bottom: 40px; /* Add space between tables */
+        }
+
+        .table {
+            background-color: white; /* White background for tables */
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, 0.05); /* Alternate row background color */
+        }
+
+        .table-bordered {
+            border-color: #dee2e6; /* Light grey border color */
+        }
+
+        img {
+            max-width: 100px; /* Limit image width */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        .rating-button {
+            margin-right: 5px;
+        }

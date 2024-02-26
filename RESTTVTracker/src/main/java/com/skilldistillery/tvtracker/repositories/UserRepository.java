@@ -1,8 +1,8 @@
-package com.skilldistillery.jobtracker.repositories;
+package com.skilldistillery.tvtracker.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.skilldistillery.jobtracker.entities.User;
+import com.skilldistillery.tvtracker.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 	User searchById(int userId);

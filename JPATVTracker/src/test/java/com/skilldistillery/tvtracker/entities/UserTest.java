@@ -1,8 +1,7 @@
-package com.skilldistillery.jobtracker.entities;
+package com.skilldistillery.tvtracker.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -21,7 +20,7 @@ public class UserTest {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		emf = Persistence.createEntityManagerFactory("JPAJobTracker");
+		emf = Persistence.createEntityManagerFactory("JPATvTracker");
 	}
 
 	@AfterAll
@@ -46,19 +45,18 @@ public class UserTest {
 		assertEquals("johnellewalker@gmail.com", user.getEmail());
 
 	}
-
 	@Test
-	void test_User_Skills_mapping() {
+	void test_User_TvShow_mapping() {
 		assertNotNull(user);
-		assertTrue(user.getSkills().size() == 14);
-
+		assertEquals("Atlanta", user.getShows().get(1).getTitle());
+		
+	}
+	@Test
+	void test_User_Rating_mapping() {
+		assertNotNull(user);
+		assertEquals(10, user.getRatings().get(0).getRating());
+		
 	}
 
-	@Test
-	void test_User_Job_mapping() {
-		assertNotNull(user);
-		assertEquals("Northrop Grumman", user.getJobs().get(0).getCompany());
-
-	}
 
 }

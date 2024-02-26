@@ -1,9 +1,9 @@
-package com.skilldistillery.jobtracker.repositories;
+package com.skilldistillery.tvtracker.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.skilldistillery.jobtracker.entities.Job;
+import com.skilldistillery.tvtracker.entities.Rating;
 
-public interface JobRepository extends JpaRepository<Job, Integer> {
-	Job searchById(int jobId);
+public interface RatingRepository extends JpaRepository<Rating, Integer> {
+	Rating searchById(int ratingId);
 }

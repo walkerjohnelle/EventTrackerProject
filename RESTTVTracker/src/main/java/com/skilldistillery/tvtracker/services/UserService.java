@@ -1,8 +1,8 @@
-package com.skilldistillery.jobtracker.services;
+package com.skilldistillery.tvtracker.services;
 
 import java.util.List;
 
-import com.skilldistillery.jobtracker.entities.User;
+import com.skilldistillery.tvtracker.entities.User;
 
 public interface UserService {
 	List<User> findAllUsers();

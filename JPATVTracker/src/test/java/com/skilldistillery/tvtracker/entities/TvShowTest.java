@@ -1,8 +1,7 @@
-package com.skilldistillery.jobtracker.entities;
+package com.skilldistillery.tvtracker.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -14,14 +13,14 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-public class JobTest {
+public class TvShowTest {
 	private static EntityManagerFactory emf;
 	private EntityManager em;
-	private Job job;
+	private TvShow show;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		emf = Persistence.createEntityManagerFactory("JPAJobTracker");
+		emf = Persistence.createEntityManagerFactory("JPATvTracker");
 	}
 
 	@AfterAll
@@ -32,7 +31,7 @@ public class JobTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		em = emf.createEntityManager();
-		job = em.find(Job.class, 1);
+		show = em.find(TvShow.class, 1);
 	}
 
 	@AfterEach
@@ -41,22 +40,23 @@ public class JobTest {
 	}
 
 	@Test
-	void test_Job_entity_mapping() {
-		assertNotNull(job);
-		assertEquals(121600, job.getMaxSalary());
+	void test_TvShow_entity_mapping() {
+		assertNotNull(show);
+		assertEquals("The Sapranos", show.getTitle());
 
 	}
-	@Test
-	void test_Job_User_entity_mapping() {
-		assertNotNull(job);
-		assertEquals("Johnelle", job.getUsers().get(0).getFirstName());
-		
-	}
-	@Test
-	void test_Job_Skills_entity_mapping() {
-		assertNotNull(job);
-		assertTrue(job.getSkills().size() == 8);
-		
-	}
 
+	@Test
+	void test_TvShow_User_mapping() {
+		assertNotNull(show);
+		assertEquals("walkerjohnelle", show.getUsers().get(0).getUsername());
+		
+	}
+	
+	@Test
+	void test_TvShow_Rating_mapping() {
+		assertNotNull(show);
+		assertEquals(10, show.getRatings().get(0).getRating());
+		
+	}
 }

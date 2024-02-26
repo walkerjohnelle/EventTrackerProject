@@ -1,4 +1,4 @@
-package com.skilldistillery.jobtracker.entities;
+package com.skilldistillery.tvtracker.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,41 +23,22 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String email;
-	@Column(name = "first_name")
-	private String firstName;
-	@Column(name = "last_name")
-	private String lastName;
+	private String username;
 	private String password;
-	private boolean employed;
-	private String role;
-	private String clearance;
-	private String education;
-	private String location;
-	private int experience;
-	@Column(name = "min_salary")
-	private double minSalary;
-	@Column(name = "max_salary")
-	private double maxSalary;
-	@Column(name = "remote_work_desired")
-	private boolean remoteWorkDesired;
+	@Column(name = "profile_picture_url")
+	private String profilePicture;
+	private boolean active;
+
+	@JsonIgnore
+	@ManyToMany
+	@JoinTable(name = "user_has_tv_show", 
+	joinColumns = @JoinColumn(name = "user_id"), 
+	inverseJoinColumns = @JoinColumn(name = "tv_show_id"))
+	private List<TvShow> shows;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
-	private List<JobMatch> jobMatches;
-
-	@JsonIgnore
-	@ManyToMany
-	@JoinTable(name = "user_has_job", 
-	joinColumns = @JoinColumn(name = "user_id"), 
-	inverseJoinColumns = @JoinColumn(name = "job_id"))
-	private List<Job> jobs;
-
-	@JsonIgnore
-	@ManyToMany
-	@JoinTable(name = "user_has_skills", 
-	joinColumns = @JoinColumn(name = "user_id"), 
-	inverseJoinColumns = @JoinColumn(name = "skill_id"))
-	private List<Skill> skills;
+	private List<Rating> ratings;
 
 	public User() {
 
@@ -79,20 +60,12 @@ public class User {
 		this.email = email;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
@@ -103,159 +76,77 @@ public class User {
 		this.password = password;
 	}
 
-	public boolean isEmployed() {
-		return employed;
+	public String getProfilePicture() {
+		return profilePicture;
 	}
 
-	public void setEmployed(boolean employed) {
-		this.employed = employed;
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
 	}
 
-	public String getRole() {
-		return role;
+	public boolean isActive() {
+		return active;
 	}
 
-	public void setRole(String role) {
-		this.role = role;
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
-	public String getClearance() {
-		return clearance;
+	public List<TvShow> getShows() {
+		return shows;
 	}
 
-	public void setClearance(String clearance) {
-		this.clearance = clearance;
+	public void setShows(List<TvShow> shows) {
+		this.shows = shows;
 	}
 
-	public String getEducation() {
-		return education;
-	}
-
-	public void setEducation(String education) {
-		this.education = education;
-	}
-
-	public List<JobMatch> getJobMatches() {
-		return jobMatches;
-	}
-
-	public void setJobMatches(List<JobMatch> jobMatches) {
-		this.jobMatches = jobMatches;
-	}
-
-	public void addJobMatch(JobMatch jobMatch) {
-		if (jobMatches == null) {
-			jobMatches = new ArrayList<>();
+	public void addShow(TvShow show) {
+		if (shows == null) {
+			shows = new ArrayList<>();
 		}
 
-		if (!jobMatches.contains(jobMatch)) {
-			jobMatches.add(jobMatch);
-		}
-
-		if (jobMatch.getUser() != null) {
-			jobMatch.getUser().removeJobMatch(jobMatch);
-
-		}
-		jobMatch.setUser(this);
-	}
-
-	public void removeJobMatch(JobMatch jobMatch) {
-		if (jobMatches != null && jobMatches.contains(jobMatch)) {
-			jobMatches.remove(jobMatch);
-			jobMatch.setUser(null);
+		if (!shows.contains(show)) {
+			shows.add(show);
+			show.addUser(this);
 		}
 	}
 
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	public List<Job> getJobs() {
-		return jobs;
-	}
-
-	public void setJobs(List<Job> jobs) {
-		this.jobs = jobs;
-	}
-
-	public void addJob(Job job) {
-		if (jobs == null) {
-			jobs = new ArrayList<>();
-		}
-
-		if (!jobs.contains(job)) {
-			jobs.add(job);
-			job.addUser(this);
+	public void removeShow(TvShow show) {
+		if (shows != null && shows.contains(show)) {
+			shows.remove(show);
+			show.removeUser(this);
 		}
 	}
 
-	public void removeJob(Job job) {
-		if (jobs != null && jobs.contains(job)) {
-			jobs.remove(job);
-			job.removeUser(this);
-		}
+	public List<Rating> getRatings() {
+		return ratings;
 	}
 
-	public List<Skill> getSkills() {
-		return skills;
+	public void setRatings(List<Rating> ratings) {
+		this.ratings = ratings;
 	}
 
-	public void setSkills(List<Skill> skills) {
-		this.skills = skills;
-	}
-
-	public void addSkill(Skill skill) {
-		if (skills == null) {
-			skills = new ArrayList<>();
+	public void addRating(Rating rating) {
+		if (ratings == null) {
+			ratings = new ArrayList<>();
 		}
 
-		if (!skills.contains(skill)) {
-			skills.add(skill);
-			skill.addUser(this);
+		if (!ratings.contains(rating)) {
+			ratings.add(rating);
 		}
-	}
 
-	public void removeSkill(Skill skill) {
-		if (skills != null && skills.contains(skill)) {
-			skills.remove(skill);
-			skill.removeUser(this);
+		if (rating.getUser() != null) {
+			rating.getUser().removeRating(rating);
+
 		}
+		rating.setUser(this);
 	}
 
-	public int getExperience() {
-		return experience;
-	}
-
-	public void setExperience(int experience) {
-		this.experience = experience;
-	}
-
-	public double getMinSalary() {
-		return minSalary;
-	}
-
-	public void setMinSalary(double minSalary) {
-		this.minSalary = minSalary;
-	}
-
-	public double getMaxSalary() {
-		return maxSalary;
-	}
-
-	public void setMaxSalary(double maxSalary) {
-		this.maxSalary = maxSalary;
-	}
-
-	public boolean isRemoteWorkDesired() {
-		return remoteWorkDesired;
-	}
-
-	public void setRemoteWorkDesired(boolean remoteWorkDesired) {
-		this.remoteWorkDesired = remoteWorkDesired;
+	public void removeRating(Rating rating) {
+		if (ratings != null && ratings.contains(rating)) {
+			ratings.remove(rating);
+			rating.setUser(null);
+		}
 	}
 
 	@Override
@@ -277,11 +168,8 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", password=" + password + ", employed=" + employed + ", role=" + role + ", clearance=" + clearance
-				+ ", education=" + education + ", location=" + location + ", experience=" + experience
-				+ ", minSalary=" + minSalary + ", maxSalary=" + maxSalary + ", remoteWorkDesired=" + remoteWorkDesired 
-				+ ", jobMatches=" + jobMatches.size() + ", jobs=" + jobs.size()	+ ", skills=" + skills.size() + "]";
+		return "User [id=" + id + ", email=" + email + ", username=" + username + ", password=" + password
+				+ ", profilePicture=" + profilePicture + ", active=" + active + ", shows=" + shows.size() + "]";
 	}
 
 }

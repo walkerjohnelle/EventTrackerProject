@@ -1,4 +1,4 @@
-package com.skilldistillery.jobtracker.controllers;
+package com.skilldistillery.tvtracker.controllers;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.skilldistillery.jobtracker.entities.User;
-import com.skilldistillery.jobtracker.services.UserService;
+import com.skilldistillery.tvtracker.entities.User;
+import com.skilldistillery.tvtracker.services.UserService;
 
 import jakarta.servlet.http.HttpServletResponse;
 

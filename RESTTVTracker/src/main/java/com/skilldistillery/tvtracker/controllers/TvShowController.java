@@ -1,4 +1,4 @@
-package com.skilldistillery.jobtracker.controllers;
+package com.skilldistillery.tvtracker.controllers;
 
 import java.util.List;
 
@@ -12,64 +12,66 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.skilldistillery.jobtracker.entities.Job;
-import com.skilldistillery.jobtracker.services.JobService;
+import com.skilldistillery.tvtracker.entities.TvShow;
+import com.skilldistillery.tvtracker.services.TvShowService;
 
 import jakarta.servlet.http.HttpServletResponse;
 
 @RequestMapping("api")
 @RestController
-public class JobController {
+public class TvShowController {
 
 	@Autowired
-	private JobService jS;
+	private TvShowService tvService;
 
-	@GetMapping(path = { "jobs", "jobs/" })
-	public List<Job> index() {
-		return jS.findAllJobs();
+	@GetMapping(path = { "shows", "shows/" })
+	public List<TvShow> index() {
+		return tvService.findAllShows();
 	}
 
-	@GetMapping("jobs/{jobId}")
-	public Job show(@PathVariable("jobId") int jobId, HttpServletResponse rsp) {
-		Job job = jS.findById(jobId);
+	@GetMapping("shows/{showId}")
+	public TvShow show(@PathVariable("showId") int showId, HttpServletResponse rsp) {
+		TvShow show = tvService.findById(showId);
 
-		if (job == null) {
+		if (show == null) {
 			rsp.setStatus(404);
 		}
-		return job;
+		return show;
 	}
 
-	@PostMapping("jobs")
-	public Job createJob(@RequestBody Job job, HttpServletResponse rsp) {
-		Job createdJob = jS.createJob(job);
-		if (createdJob == null) {
+	@PostMapping("shows")
+	public TvShow createJob(@RequestBody TvShow show, HttpServletResponse rsp) {
+		TvShow createdShow = tvService.createShow(show);
+		if (createdShow == null) {
 			rsp.setStatus(404);
+		} else {
+			rsp.setStatus(201);
 		}
-		return createdJob;
+		return createdShow;
 	}
 
-	@PutMapping("jobs/{jobId}")
-	public Job updateJob(@PathVariable("jobId") int jobId, @RequestBody Job job, HttpServletResponse rsp) {
+	@PutMapping("shows/{showId}")
+	public TvShow updateShow(@PathVariable("showId") int showId, @RequestBody TvShow show, HttpServletResponse rsp) {
 		try {
-			job = jS.updateJob(jobId, job);
-			if (job == null) {
+			show = tvService.updateShow(showId, show);
+			if (show == null) {
 				rsp.setStatus(404);
 			}
 		} catch (Exception e) {
 			rsp.setStatus(400);
-			job = null;
+			show = null;
 			e.printStackTrace();
 		}
-		return job;
+		return show;
 	}
 
-	@DeleteMapping("jobs/{jobId}")
-	public void deleteJob(@PathVariable("jobId") int jobId, HttpServletResponse rsp) {
-		Job job = jS.findById(jobId);
+	@DeleteMapping("shows/{showId}")
+	public void deleteShow(@PathVariable("showId") int showId, HttpServletResponse rsp) {
+		TvShow show = tvService.findById(showId);
 
 		try {
-			if (job != null) {
-				jS.deleteJob(jobId);
+			if (show != null) {
+				tvService.deleteShow(showId);
 				rsp.setStatus(204);
 			} else {
 				rsp.setStatus(404);
@@ -78,6 +80,16 @@ public class JobController {
 			rsp.setStatus(400);
 			e.printStackTrace();
 		}
+	}
+
+	@GetMapping("shows/search/{keyword}")
+	public List<TvShow> searchByKeyword(@PathVariable("keyword") String keyword, HttpServletResponse rsp) {
+		List<TvShow> films = tvService.searchByKeyword(keyword);
+		if (films == null) {
+			rsp.setStatus(404);
+		}
+
+		return films;
 	}
 
 }

@@ -1,32 +1,44 @@
-package com.skilldistillery.jobtracker.entities;
+package com.skilldistillery.tvtracker.entities;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 @Entity
-public class Skill {
+@Table(name = "tv_show")
+public class TvShow {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String name;
-	@JsonIgnore
-	@ManyToMany(mappedBy = "skills")
+	private String title;
+	private String genre;
+	private String description;
+	@Column(name = "release_year")
+	private int releaseYear;
+	private int seasons;
+	@Column(name = "total_episodes")
+	private int totalEpisodes;
+	private boolean active;
+	@Column(name = "streaming_platform")
+	private String streamingPlatform;
+	@Column(name = "image_url")
+	private String imageUrl;
+	
+	@ManyToMany(mappedBy = "shows")
 	private List<User> users;
+	
+	@ManyToMany(mappedBy = "shows")
+	private List<Rating> ratings;
 
-	@JsonIgnore
-	@ManyToMany(mappedBy = "skills")
-	private List<Job> jobs;
-
-	public Skill() {
+	public TvShow() {
 
 	}
 
@@ -38,12 +50,76 @@ public class Skill {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public int getReleaseYear() {
+		return releaseYear;
+	}
+
+	public void setReleaseYear(int releaseYear) {
+		this.releaseYear = releaseYear;
+	}
+
+	public int getSeasons() {
+		return seasons;
+	}
+
+	public void setSeasons(int seasons) {
+		this.seasons = seasons;
+	}
+
+	public int getTotalEpisodes() {
+		return totalEpisodes;
+	}
+
+	public void setTotalEpisodes(int totalEpisodes) {
+		this.totalEpisodes = totalEpisodes;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public String getStreamingPlatform() {
+		return streamingPlatform;
+	}
+
+	public void setStreamingPlatform(String streamingPlatform) {
+		this.streamingPlatform = streamingPlatform;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public String getGenre() {
+		return genre;
+	}
+
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	public List<User> getUsers() {
@@ -54,48 +130,48 @@ public class Skill {
 		this.users = users;
 	}
 
+	public List<Rating> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(List<Rating> ratings) {
+		this.ratings = ratings;
+	}
+
 	public void addUser(User user) {
 		if (users == null) {
 			users = new ArrayList<>();
 		}
 		if (!users.contains(user)) {
 			users.add(user);
-			user.addSkill(this);
+			user.addShow(this);
 		}
 	}
 
 	public void removeUser(User user) {
 		if (users != null && users.contains(user)) {
 			users.remove(user);
-			user.removeSkill(this);
+			user.removeShow(this);
+		}
+	}
+	
+	public void addRating(Rating rating) {
+		if (ratings == null) {
+			ratings = new ArrayList<>();
+		}
+		if (!ratings.contains(rating)) {
+			ratings.add(rating);
+			rating.addShow(this);
 		}
 	}
 
-	public List<Job> getJobs() {
-		return jobs;
-	}
-
-	public void setJobs(List<Job> jobs) {
-		this.jobs = jobs;
-	}
-
-	public void addJob(Job job) {
-		if (jobs == null) {
-			jobs = new ArrayList<>();
-		}
-		if (!jobs.contains(job)) {
-			jobs.add(job);
-			job.addSkill(this);
+	public void removeRating(Rating rating) {
+		if (ratings != null && ratings.contains(rating)) {
+			ratings.remove(rating);
+			rating.removeShow(this);
 		}
 	}
-
-	public void removeJob(Job job) {
-		if (jobs != null && jobs.contains(job)) {
-			jobs.remove(job);
-			job.removeSkill(this);
-		}
-	}
-
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -109,13 +185,16 @@ public class Skill {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Skill other = (Skill) obj;
+		TvShow other = (TvShow) obj;
 		return id == other.id;
 	}
 
 	@Override
 	public String toString() {
-		return "Skill [id=" + id + ", name=" + name + ", users=" + users + ", jobs=" + jobs.size() + "]";
+		return "TvShow [id=" + id + ", title=" + title + ", genre=" + genre + ", description=" + description
+				+ ", releaseYear=" + releaseYear + ", seasons=" + seasons + ", totalEpisodes=" + totalEpisodes
+				+ ", active=" + active + ", streamingPlatform=" + streamingPlatform + ", imageUrl=" + imageUrl
+				+ ", users=" + users.size() + ", ratings=" + ratings.size() + "]";
 	}
 
 }

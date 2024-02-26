@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.2"
-	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
-	<persistence-unit name="JPAJobTracker">
+<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+	<persistence-unit name="JPATvTracker">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-		<class>com.skilldistillery.jobtracker.entities.Job</class>
-		<class>com.skilldistillery.jobtracker.entities.JobMatch</class>
-		<class>com.skilldistillery.jobtracker.entities.Skill</class>
-		<class>com.skilldistillery.jobtracker.entities.User</class>
+		<class>com.skilldistillery.tvtracker.entities.Rating</class>
+		<class>com.skilldistillery.tvtracker.entities.TvShow</class>
+		<class>com.skilldistillery.tvtracker.entities.User</class>
 
 		<properties>
 			<property name="jakarta.persistence.jdbc.url"
-				value="jdbc:mysql://localhost:3306/jobtrackerdb?useSSL=false&amp;useLegacyDatetimeCode=false&amp;serverTimezone=US/Mountain" />
+				value="jdbc:mysql://localhost:3306/tvwatchlistdb?useSSL=false&amp;useLegacyDatetimeCode=false&amp;serverTimezone=US/Mountain" />
 			<property name="jakarta.persistence.jdbc.user"
-				value="jobseeker" />
+				value="tvguru" />
 			<property name="jakarta.persistence.jdbc.password"
-				value="jobseeker" />
+				value="tvguru" />
 			<property name="jakarta.persistence.jdbc.driver"
 				value="com.mysql.cj.jdbc.Driver" />
 
@@ -33,6 +29,6 @@
 			<property name="hibernate.c3p0.max_statements" value="0" />
 			<property name="hibernate.c3p0.timeout" value="60" />
 		</properties>
-
 	</persistence-unit>
+
 </persistence>
