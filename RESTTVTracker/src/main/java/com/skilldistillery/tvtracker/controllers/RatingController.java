@@ -61,12 +61,13 @@ public class RatingController {
 		return ratingService.getRatingsByShow(showId);
 	}
 
-	@PostMapping("ratings/shows/{showId}")
-	public Rating createRating(@PathVariable("showId") int showId, @RequestBody Rating rating,
-			HttpServletResponse rsp) {
+	@PostMapping("ratings")
+	public Rating createRating(@RequestBody Rating rating, HttpServletResponse rsp) {
+		Rating createdRating = ratingService.createRating(rating);
 
-		Rating createdRating = ratingService.createRating(showId, rating);
-		if (createdRating == null) {
+		if (createdRating != null) {
+			rsp.setStatus(201);
+		} else {
 			rsp.setStatus(404);
 		}
 		return createdRating;

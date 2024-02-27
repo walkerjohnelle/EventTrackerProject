@@ -6,4 +6,6 @@ import com.skilldistillery.tvtracker.entities.Rating;
 
 public interface RatingRepository extends JpaRepository<Rating, Integer> {
 	Rating searchById(int ratingId);
+	
+
 }

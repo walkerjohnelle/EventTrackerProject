@@ -8,8 +8,8 @@ public interface RatingService {
 	List<Rating> findAllRatings();
 
 	Rating findById(int ratingId);
-
-	Rating createRating(int showId, Rating rating);
+	
+	Rating createRating(Rating rating);
 
 	Rating updateRating(int ratingId, Rating rating);
 

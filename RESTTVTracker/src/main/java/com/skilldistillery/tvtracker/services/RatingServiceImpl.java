@@ -35,14 +35,9 @@ public class RatingServiceImpl implements RatingService {
 	}
 
 	@Override
-	public Rating createRating(int showId, Rating rating) {
-		TvShow show = tvRepo.findById(showId).orElse(null);
+	public Rating createRating(Rating rating) {
 
-		if (show != null) {
-			rating.setTvShow(show);
-			return ratingRepo.saveAndFlush(rating);
-		}
-		return null;
+		return ratingRepo.saveAndFlush(rating);
 	}
 
 	@Override

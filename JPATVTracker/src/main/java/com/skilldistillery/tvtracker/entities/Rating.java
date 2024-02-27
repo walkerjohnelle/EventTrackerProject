@@ -17,7 +17,7 @@ public class Rating {
 	private int id;
 	private int rating;
 	private String review;
-
+	
 	@ManyToOne
 	@JoinColumn(name = "tv_show_id")
 	private TvShow tvShow;
