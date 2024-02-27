@@ -54,7 +54,7 @@ public class RatingTest {
 	@Test
 	void test_Rating_TvShow_entity_mapping() {
 		assertNotNull(rating);
-		assertEquals("The Sapranos", rating.getShows().get(0).getTitle());
+		assertEquals("The Sapranos", rating.getTvShow().getTitle());
 		
 	}
 

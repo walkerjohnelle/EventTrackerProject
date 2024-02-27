@@ -61,11 +61,18 @@ CREATE TABLE IF NOT EXISTS `rating` (
   `rating` INT NULL,
   `review` TEXT NULL,
   `user_id` INT NOT NULL,
+  `tv_show_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_rating_user1_idx` (`user_id` ASC),
+  INDEX `fk_rating_tv_show1_idx` (`tv_show_id` ASC),
   CONSTRAINT `fk_rating_user1`
     FOREIGN KEY (`user_id`)
     REFERENCES `user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rating_tv_show1`
+    FOREIGN KEY (`tv_show_id`)
+    REFERENCES `tv_show` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -90,30 +97,6 @@ CREATE TABLE IF NOT EXISTS `user_has_tv_show` (
   CONSTRAINT `fk_user_has_tv_show_tv_show1`
     FOREIGN KEY (`tv_show_id`)
     REFERENCES `tv_show` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `tv_show_has_rating`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `tv_show_has_rating` ;
-
-CREATE TABLE IF NOT EXISTS `tv_show_has_rating` (
-  `tv_show_id` INT NOT NULL,
-  `rating_id` INT NOT NULL,
-  PRIMARY KEY (`tv_show_id`, `rating_id`),
-  INDEX `fk_tv_show_has_rating_rating1_idx` (`rating_id` ASC),
-  INDEX `fk_tv_show_has_rating_tv_show1_idx` (`tv_show_id` ASC),
-  CONSTRAINT `fk_tv_show_has_rating_tv_show1`
-    FOREIGN KEY (`tv_show_id`)
-    REFERENCES `tv_show` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_tv_show_has_rating_rating1`
-    FOREIGN KEY (`rating_id`)
-    REFERENCES `rating` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -158,7 +141,8 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `tvwatchlistdb`;
-INSERT INTO `rating` (`id`, `rating`, `review`, `user_id`) VALUES (1, 10, 'This show is now quite literally the gold standard of television for me now! It\'s going to be really hard for anything to really compete. The Sapranos literally has everything from comedy, family drama, crime thrills, and did I mention comedy? I  seriously can\'t believe that this show has been out for over 25 years and I\'m just now getting to it!', 1);
+INSERT INTO `rating` (`id`, `rating`, `review`, `user_id`, `tv_show_id`) VALUES (1, 10, 'This show is now quite literally the gold standard of television for me now! It\'s going to be really hard for anything to really compete. The Sapranos literally has everything from comedy, family drama, crime thrills, and did I mention comedy? I  seriously can\'t believe that this show has been out for over 25 years and I\'m just now getting to it!', 1, 1);
+INSERT INTO `rating` (`id`, `rating`, `review`, `user_id`, `tv_show_id`) VALUES (2, 9, 'This show is sow impoartant for the culture. Even though I\'m not from ATL, I  feel like this show definitely transports me and is as funny as it is thought provoking', 1, 2);
 
 COMMIT;
 
@@ -173,16 +157,6 @@ INSERT INTO `user_has_tv_show` (`user_id`, `tv_show_id`) VALUES (1, 2);
 INSERT INTO `user_has_tv_show` (`user_id`, `tv_show_id`) VALUES (1, 3);
 INSERT INTO `user_has_tv_show` (`user_id`, `tv_show_id`) VALUES (1, 4);
 INSERT INTO `user_has_tv_show` (`user_id`, `tv_show_id`) VALUES (1, 5);
-
-COMMIT;
-
-
--- -----------------------------------------------------
--- Data for table `tv_show_has_rating`
--- -----------------------------------------------------
-START TRANSACTION;
-USE `tvwatchlistdb`;
-INSERT INTO `tv_show_has_rating` (`tv_show_id`, `rating_id`) VALUES (1, 1);
 
 COMMIT;
 

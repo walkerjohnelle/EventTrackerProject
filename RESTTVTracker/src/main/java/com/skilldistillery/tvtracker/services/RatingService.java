@@ -12,8 +12,10 @@ public interface RatingService {
 	Rating createRating(int showId, Rating rating);
 
 	Rating updateRating(int ratingId, Rating rating);
-	
+
 	List<Rating> getUserRatings(int userId);
 
-	boolean deleteRating(int ratingId);
+	boolean deleteRating(int ratingId, int showId);
+
+	List<Rating> getRatingsByShow(int showId);
 }

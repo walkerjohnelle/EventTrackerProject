@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -31,12 +34,12 @@ public class TvShow {
 	private String streamingPlatform;
 	@Column(name = "image_url")
 	private String imageUrl;
-	
+	@JsonIgnore
 	@ManyToMany(mappedBy = "shows")
 	private List<User> users;
-	
-	@ManyToMany(mappedBy = "shows")
-	private List<Rating> ratings;
+	@JsonIgnore
+	@OneToMany(mappedBy = "tvShow")
+    private List<Rating> ratings;
 
 	public TvShow() {
 
@@ -159,16 +162,20 @@ public class TvShow {
 		if (ratings == null) {
 			ratings = new ArrayList<>();
 		}
+
 		if (!ratings.contains(rating)) {
 			ratings.add(rating);
-			rating.addShow(this);
+			if (rating.getTvShow() != null) {
+				rating.getTvShow().removeRating(rating);
+			}
+			rating.setTvShow(this);
 		}
 	}
 
 	public void removeRating(Rating rating) {
 		if (ratings != null && ratings.contains(rating)) {
 			ratings.remove(rating);
-			rating.removeShow(this);
+			rating.setTvShow(null);
 		}
 	}
 	
@@ -194,7 +201,7 @@ public class TvShow {
 		return "TvShow [id=" + id + ", title=" + title + ", genre=" + genre + ", description=" + description
 				+ ", releaseYear=" + releaseYear + ", seasons=" + seasons + ", totalEpisodes=" + totalEpisodes
 				+ ", active=" + active + ", streamingPlatform=" + streamingPlatform + ", imageUrl=" + imageUrl
-				+ ", users=" + users.size() + ", ratings=" + ratings.size() + "]";
+				+ ", users=" + users + ", ratings=" + ratings + "]";
 	}
 
 }

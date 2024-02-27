@@ -1,18 +1,12 @@
 package com.skilldistillery.tvtracker.entities;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -23,14 +17,11 @@ public class Rating {
 	private int id;
 	private int rating;
 	private String review;
-	
-	@JsonIgnore
-	@ManyToMany
-	@JoinTable(name = "tv_show_has_rating", 
-	joinColumns = @JoinColumn(name = "rating_id"), 
-	inverseJoinColumns = @JoinColumn(name = "tv_show_id"))
-	private List<TvShow> shows;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "tv_show_id")
+	private TvShow tvShow;
+
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -59,32 +50,14 @@ public class Rating {
 		this.review = review;
 	}
 
-	public List<TvShow> getShows() {
-		return shows;
+	public TvShow getTvShow() {
+		return tvShow;
 	}
 
-	public void setShows(List<TvShow> shows) {
-		this.shows = shows;
+	public void setTvShow(TvShow tvShow) {
+		this.tvShow = tvShow;
 	}
 
-	public void addShow(TvShow show) {
-		if(shows == null) {
-			shows = new ArrayList<>();
-		}
-		
-		if(!shows.contains(show)) {
-			shows.add(show);
-			show.addRating(this);
-		}
-	}
-	
-	public void removeShow(TvShow show) {
-		if(shows != null && shows.contains(show)) {
-			shows.remove(show);
-			show.removeRating(this);
-		}
-	}
-	
 	public User getUser() {
 		return user;
 	}
@@ -112,7 +85,8 @@ public class Rating {
 
 	@Override
 	public String toString() {
-		return "Rating [id=" + id + ", rating=" + rating + ", review=" + review + ", shows=" + shows.size() + "]";
+		return "Rating [id=" + id + ", rating=" + rating + ", review=" + review + ", tvShow=" + tvShow + ", user="
+				+ user + "]";
 	}
 
 }

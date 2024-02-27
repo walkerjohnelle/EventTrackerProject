@@ -31,16 +31,18 @@ public class RatingServiceImpl implements RatingService {
 
 	@Override
 	public Rating findById(int ratingId) {
-		return ratingRepo.searchById(ratingId);
+		return ratingRepo.findById(ratingId).orElse(null);
 	}
 
 	@Override
 	public Rating createRating(int showId, Rating rating) {
-		TvShow show = tvRepo.searchById(showId);
+		TvShow show = tvRepo.findById(showId).orElse(null);
 
-		rating.addShow(show);
-
-		return ratingRepo.saveAndFlush(rating);
+		if (show != null) {
+			rating.setTvShow(show);
+			return ratingRepo.saveAndFlush(rating);
+		}
+		return null;
 	}
 
 	@Override
@@ -54,19 +56,35 @@ public class RatingServiceImpl implements RatingService {
 	}
 
 	@Override
-	public boolean deleteRating(int ratingId) {
-		Optional<Rating> optRating = ratingRepo.findById(ratingId);
-		if (optRating.isPresent()) {
-			ratingRepo.delete(optRating.get());
-			return true;
+	public boolean deleteRating(int ratingId, int showId) {
+		TvShow show = tvRepo.findById(showId).orElse(null);
+		if (show == null) {
+			return false;
 		}
-		return false;
+
+		Rating rating = ratingRepo.findById(ratingId).orElse(null);
+		if (rating == null || rating.getTvShow() == null || rating.getTvShow().getId() != showId) {
+			return false;
+		}
+
+		ratingRepo.deleteById(ratingId);
+		return true;
 	}
 
 	@Override
 	public List<Rating> getUserRatings(int userId) {
-		List<Rating> userRatings = userRepo.searchById(userId).getRatings();
-		return userRatings;
+		return userRepo.findById(userId).map(user -> user.getRatings()).orElse(null);
+	}
+
+	@Override
+	public List<Rating> getRatingsByShow(int showId) {
+		Optional<TvShow> showOptional = tvRepo.findById(showId);
+		if (showOptional.isPresent()) {
+			TvShow show = showOptional.get();
+			return show.getRatings();
+		} else {
+			return null;
+		}
 	}
 
 }

@@ -72,4 +72,9 @@ public class TvShowServiceImpl implements TvShowService {
 		List<TvShow> shows = tvRepo.findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(keyword, keyword);
 		return shows;
 	}
+
+	@Override
+	public boolean existsById(int showId) {
+		return tvRepo.existsById(showId);
+	}
 }

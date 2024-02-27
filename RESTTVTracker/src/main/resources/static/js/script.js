@@ -1,84 +1,37 @@
 document.addEventListener('DOMContentLoaded', function() {
-	init();
+    init();
 });
 
 function init() {
-	document.getElementById('showCreateFormBtn').addEventListener('click', showCreateForm);
-	document.getElementById('ratingCreateFormBtn').addEventListener('click', ratingCreateForm);
-	document.getElementById('searchBtn').addEventListener('click', searchShows);
-	getTvShows();
-	getRatings();
+    document.getElementById('searchButton').addEventListener('click', searchShows);
+    document.getElementById('addShowButton').addEventListener('click', showNewShowForm);
+    document.getElementById('newShowForm').addEventListener('submit', addNewShow);
+    document.getElementById('newRatingForm').addEventListener('submit', addNewRating);
 
-	let editButtons = document.querySelectorAll('.edit-btn');
-	editButtons.forEach(button => {
-		button.addEventListener('click', function() {
-			let tvShowId = this.dataset.id;
-			editTvShow(tvShowId);
-		});
-	});
-
-	document.getElementById('ratingCreateFormBtn').addEventListener('click', showRatingCreateForm);
-
-	document.getElementById('submitRatingBtn').addEventListener('click', addNewRating);
-
-	let ratingEditButtons = document.querySelectorAll('.edit-rating-btn');
-	ratingEditButtons.forEach(button => {
-		button.addEventListener('click', function() {
-			let ratingId = this.dataset.id;
-			editRating(ratingId);
-		});
-	});
-
-	let deleteButtons = document.querySelectorAll('.delete-rating-btn');
-	deleteButtons.forEach(button => {
-		button.addEventListener('click', function() {
-			let ratingId = this.dataset.id;
-			deleteRating(ratingId);
-		});
-	});
-
-	let showRatingButtons = document.querySelectorAll('.show-rating-btn');
-	showRatingButtons.forEach(button => {
-		button.addEventListener('click', function() {
-			let showId = this.dataset.id;
-			showRatingCreateForm(showId);
-		});
-	});
-}
-
-function showRatingCreateForm(showId) {
-	document.getElementById('newRatingForm').style.display = 'block';
-	document.getElementById('submitRatingBtn').dataset.showId = showId;
-}
-
-function addNewRating() {
-	let showId = document.getElementById('submitRatingBtn').dataset.showId;
-	let newRating = {
-		rating: document.getElementById('rating').value,
-		review: document.getElementById('review').value
-	};
-	addRating(showId, newRating);
+    getTvShows();
+    getRatings();
 }
 
 function getTvShows() {
-	fetch('api/shows')
-		.then(response => response.json())
-		.then(tvShows => {
-			displayTvShows(tvShows);
-		})
-		.catch(error => {
-			console.error('Error fetching TV shows:', error);
-		});
+    fetch('api/shows')
+        .then(response => response.json())
+        .then(tvShows => {
+            displayTvShows(tvShows);
+        })
+        .catch(error => {
+            console.error('Error fetching TV shows:', error);
+        });
 }
 
 function displayTvShows(tvShows) {
-	let tvShowTable = document.getElementById('tvShowTable');
-	tvShowTable.innerHTML = '';
+    let tvShowList = document.getElementById('tvShowList');
+    tvShowList.innerHTML = '';
 
-	tvShows.forEach(tvShow => {
-		let row = document.createElement('tr');
-		row.innerHTML = `
+    tvShows.forEach(tvShow => {
+        let row = document.createElement('tr');
+        row.innerHTML = `
             <td>${tvShow.title}</td>
+            <td>${tvShow.genre}</td>
             <td>${tvShow.description}</td>
             <td>${tvShow.releaseYear}</td>
             <td>${tvShow.seasons}</td>
@@ -89,232 +42,163 @@ function displayTvShows(tvShows) {
                 <button class="btn btn-sm btn-danger" onclick="deleteTvShow(${tvShow.id})">Delete</button>
             </td>
         `;
-		tvShowTable.appendChild(row);
-	});
-}
-
-function showCreateForm() {
-}
-
-
-function deleteTvShow(tvShowId) {
-	fetch(`api/shows/${tvShowId}`, {
-		method: 'DELETE'
-	})
-		.then(response => {
-			if (response.ok) {
-				getTvShows();
-			} else {
-				console.error('Failed to delete TV show');
-			}
-		})
-		.catch(error => {
-			console.error('Error deleting TV show:', error);
-		});
+        tvShowList.appendChild(row);
+    });
 }
 
 function getRatings() {
-	fetch('api/ratings')
-		.then(response => response.json())
-		.then(ratings => {
-			displayRatings(ratings);
-		})
-		.catch(error => {
-			console.error('Error fetching ratings:', error);
-		});
+    fetch('api/ratings')
+        .then(response => response.json())
+        .then(ratings => {
+            displayRatings(ratings);
+        })
+        .catch(error => {
+            console.error('Error fetching ratings:', error);
+        });
 }
 
 function displayRatings(ratings) {
-	let ratingTable = document.getElementById('ratingTable');
-	ratingTable.innerHTML = '';
+    let ratingsList = document.getElementById('ratingsList');
+    ratingsList.innerHTML = '';
 
-	ratings.forEach(rating => {
-		let row = document.createElement('tr');
-		row.innerHTML = `
+    ratings.forEach(rating => {
+        let row = document.createElement('tr');
+        row.innerHTML = `
             <td>${rating.rating}</td>
             <td>${rating.review}</td>
-            <td>
-                <button class="btn btn-sm btn-primary" onclick="editRating(${rating.id})">Edit</button>
-                <button class="btn btn-sm btn-danger" onclick="deleteRating(${rating.id})">Delete</button>
-            </td>
         `;
-		ratingTable.appendChild(row);
-	});
+        ratingsList.appendChild(row);
+    });
 }
-
-function ratingCreateForm() {
-}
-
-function editRating(ratingId) {
-}
-
-function deleteRating(ratingId) {
-	fetch(`api/ratings/${ratingId}`, {
-		method: 'DELETE'
-	})
-		.then(response => {
-			if (response.ok) {
-				getRatings();
-			} else {
-				console.error('Failed to delete rating');
-			}
-		})
-		.catch(error => {
-			console.error('Error deleting rating:', error);
-		});
-}
-
 
 function searchShows() {
-	let keyword = document.getElementById('keyword').value.trim();
-	if (keyword !== '') {
-		let xhr = new XMLHttpRequest();
-		xhr.open('GET', 'api/shows/search/' + encodeURIComponent(keyword));
-
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState === 4) {
-				if (xhr.status === 200) {
-					let shows = JSON.parse(xhr.responseText);
-
-					if (shows.length > 0) {
-						displaySearchResults(shows);
-					} else {
-						let searchResultsDiv = document.getElementById('searchResults');
-						searchResultsDiv.textContent = 'No films found';
-						searchResultsDiv.style.display = 'block';
-					}
-				} else {
-					alert('Error searching shows');
-				}
-			}
-		};
-		xhr.send();
-	}
-
+    let keyword = document.getElementById('searchKeyword').value.trim();
+    if (keyword !== '') {
+        fetch(`api/shows/search/${encodeURIComponent(keyword)}`)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Error searching shows');
+                }
+            })
+            .then(shows => {
+                displaySearchResults(shows);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
 }
 
 function displaySearchResults(shows) {
-	let searchResultsDiv = document.getElementById('searchResults');
-	searchResultsDiv.textContent = '';
+    let searchResultsDiv = document.getElementById('searchResults');
+    searchResultsDiv.innerHTML = '';
 
-	if (shows.length === 0) {
-		searchResultsDiv.textContent = 'No shows found';
-		return;
-	}
+    if (shows.length === 0) {
+        searchResultsDiv.textContent = 'No shows found';
+        return;
+    }
 
-	let table = document.createElement('table');
-	table.classList.add('table');
+    let table = document.createElement('table');
+    table.classList.add('table');
 
-	let thead = document.createElement('thead');
-	let headerRow = document.createElement('tr');
-	let headers = ['Title', 'Description', 'Release Year', 'Seasons', 'Total Episodes', 'Streaming Platform'];
-	for (let headerText of headers) {
-		let th = document.createElement('th');
-		th.textContent = headerText;
-		headerRow.appendChild(th);
-	}
-	thead.appendChild(headerRow);
-	table.appendChild(thead);
+    let thead = document.createElement('thead');
+    let headerRow = document.createElement('tr');
+    let headers = ['Title', 'Genre', 'Description', 'Release Year', 'Seasons', 'Total Episodes', 'Platform'];
+    for (let headerText of headers) {
+        let th = document.createElement('th');
+        th.textContent = headerText;
+        headerRow.appendChild(th);
+    }
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
 
-	let tbody = document.createElement('tbody');
-	for (let show of shows) {
-		let row = document.createElement('tr');
-		row.innerHTML = `
+    let tbody = document.createElement('tbody');
+    for (let show of shows) {
+        let row = document.createElement('tr');
+        row.innerHTML = `
             <td>${show.title}</td>
+            <td>${show.genre}</td>
             <td>${show.description}</td>
             <td>${show.releaseYear}</td>
             <td>${show.seasons}</td>
             <td>${show.totalEpisodes}</td>
             <td>${show.streamingPlatform}</td>
         `;
-		tbody.appendChild(row);
-	}
-	table.appendChild(tbody);
+        tbody.appendChild(row);
+    }
+    table.appendChild(tbody);
 
-	searchResultsDiv.appendChild(table);
-}
-function createNewShow() {
-	let newShow = {
-		title: document.newShowForm.title.value,
-		genre: document.newShowForm.genre.value,
-		description: document.newShowForm.description.value,
-		releaseYear: parseInt(document.newShowForm.releaseYear.value),
-		seasons: parseInt(document.newShowForm.seasons.value),
-		totalEpisodes: parseInt(document.newShowForm.totalEpisodes.value),
-		active: document.newShowForm.active.checked,
-		streamingPlatform: document.newShowForm.streamingPlatform.value,
-	};
-
-	let tvShowId = document.getElementById('tvShowId').value;
-	if (tvShowId) {
-		submitEditedTvShow(tvShowId, newShow);
-	} else {
-		addShow(newShow);
-	}
+    searchResultsDiv.appendChild(table);
 }
 
-
-
-function addShow(newShow) {
-	let xhr = new XMLHttpRequest();
-	xhr.open('POST', 'api/shows');
-	xhr.setRequestHeader('Content-Type', 'application/json');
-
-	xhr.onreadystatechange = function() {
-		console.log("Ready state:", xhr.readyState);
-		if (xhr.readyState === 4) {
-			console.log("Status code:", xhr.status);
-			console.log("Response:", xhr.responseText);
-			if (xhr.status === 201) {
-				let createdShow = JSON.parse(xhr.responseText);
-				displayShow(createdShow);
-
-				document.getElementById('showData').style.display = 'block';
-			} else {
-				alert('Error creating new show');
-			}
-		}
-	};
-	xhr.send(JSON.stringify(newShow));
+function showNewShowForm() {
+    document.getElementById('newShowFormContainer').style.display = 'block';
 }
 
+function addNewShow(event) {
+    event.preventDefault();
 
-function displayShow(show) {
-	let dataDiv = document.getElementById('showData');
-	dataDiv.textContent = '';
+    let newShow = {
+        title: document.getElementById('showTitle').value,
+        genre: document.getElementById('showGenre').value,
+        description: document.getElementById('showDescription').value,
+        releaseYear: parseInt(document.getElementById('showReleaseYear').value),
+        seasons: parseInt(document.getElementById('showSeasons').value),
+        totalEpisodes: parseInt(document.getElementById('showEpisodes').value),
+        streamingPlatform: document.getElementById('showStreamingService').value
+    };
 
-	let title = document.createElement('h1');
-	title.textContent = show.title;
-	dataDiv.appendChild(title);
+    fetch('api/shows', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newShow)
+    })
+    .then(response => {
+        if (response.ok) {
+            getTvShows();
+            document.getElementById('newShowFormContainer').style.display = 'none';
+        } else {
+            throw new Error('Failed to add new show');
+        }
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
 
+function addNewRating(event) {
+    event.preventDefault();
 
-	let description = document.createElement('blockquote');
-	description.textContent = show.description;
-	dataDiv.appendChild(description);
+    let newRating = {
+        rating: parseFloat(document.getElementById('ratingValue').value),
+        review: document.getElementById('ratingReview').value
+    };
 
-	let detailsList = document.createElement('ul');
+    // Assume showId is available in the context or fetched from somewhere
+    let showId = 1; // Replace 1 with the actual showId
 
-	let genre = document.createElement('li');
-	title.textContent = show.genre;
-	dataDiv.appendChild(genre);
-
-	let releaseYearItem = document.createElement('li');
-	releaseYearItem.textContent = 'Release Year: ' + show.releaseYear;
-	detailsList.appendChild(releaseYearItem);
-
-	let seasonsItem = document.createElement('li');
-	seasonsItem.textContent = 'Seasons: ' + show.seasons;
-	detailsList.appendChild(seasonsItem);
-
-	let totalEpisodesItem = document.createElement('li');
-	totalEpisodesItem.textContent = 'Total Episodes: ' + show.totalEpisodes;
-	detailsList.appendChild(totalEpisodesItem);
-
-	let streamingPlatformItem = document.createElement('li');
-	streamingPlatformItem.textContent = 'Streaming Platform: ' + show.streamingPlatform;
-	detailsList.appendChild(streamingPlatformItem);
-
-	dataDiv.appendChild(detailsList);
+    fetch(`api/ratings/shows/${showId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newRating)
+    })
+    .then(response => {
+        if (response.ok) {
+            getRatings();
+            document.getElementById('newRatingFormContainer').style.display = 'none';
+        } else {
+            throw new Error('Failed to add new rating');
+        }
+    })
+    .catch(error => {
+        console.error(error);
+    });
 }
 
 function editTvShow(tvShowId) {
@@ -337,81 +221,18 @@ function editTvShow(tvShowId) {
 			console.error('Error fetching TV show details:', error);
 		});
 }
-
-
-function submitEditedTvShow(tvShowId, updatedShow) {
+function deleteTvShow(tvShowId) {
 	fetch(`api/shows/${tvShowId}`, {
-		method: 'PUT',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(updatedShow)
+		method: 'DELETE'
 	})
 		.then(response => {
 			if (response.ok) {
 				getTvShows();
 			} else {
-				console.error('Failed to update TV show');
+				console.error('Failed to delete TV show');
 			}
 		})
 		.catch(error => {
-			console.error('Error updating TV show:', error);
-		});
-}
-
-function addRating(showId, newRating) {
-	fetch(`api/ratings/shows/${showId}`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(newRating)
-	})
-		.then(response => {
-			if (response.ok) {
-				getRatings();
-			} else {
-				console.error('Failed to add rating');
-			}
-		})
-		.catch(error => {
-			console.error('Error adding rating:', error);
-		});
-}
-
-
-function editRating(ratingId, updatedRating) {
-	fetch(`api/ratings/${ratingId}`, {
-		method: 'PUT',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(updatedRating)
-	})
-		.then(response => {
-			if (response.ok) {
-				getRatings();
-			} else {
-				console.error('Failed to update rating');
-			}
-		})
-		.catch(error => {
-			console.error('Error updating rating:', error);
-		});
-}
-
-function deleteRating(ratingId) {
-	fetch(`api/ratings/${ratingId}`, {
-		method: 'DELETE'
-	})
-		.then(response => {
-			if (response.ok) {
-				getRatings();
-			} else {
-				console.error('Failed to delete rating');
-			}
-		})
-		.catch(error => {
-			console.error('Error deleting rating:', error);
+			console.error('Error deleting TV show:', error);
 		});
 }

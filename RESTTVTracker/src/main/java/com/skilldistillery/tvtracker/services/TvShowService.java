@@ -17,4 +17,6 @@ public interface TvShowService {
 	
 	List<TvShow> searchByKeyword(String keyword);
 
+	boolean existsById(int showId);
+
 }
