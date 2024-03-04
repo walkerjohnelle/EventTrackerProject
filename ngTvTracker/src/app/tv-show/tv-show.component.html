@@ -1,0 +1,61 @@
+<div class="container">
+  <h1>TV Shows</h1>
+  <div *ngIf="tvShows.length > 0; else noShowsTemplate">
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let show of tvShows" (click)="selectShow(show)">
+        {{ show.title }} - {{ show.genre }}
+      </li>
+    </ul>
+  </div>
+  <ng-template #noShowsTemplate>
+    <p>No TV shows available.</p>
+  </ng-template>
+
+  <div *ngIf="selectedShow" class="mt-4">
+    <h2>Selected TV Show</h2>
+    <p>Title: {{ selectedShow.title }}</p>
+    <p>Genre: {{ selectedShow.genre }}</p>
+    <p>Description: {{ selectedShow.description }}</p>
+    <p>Release Year: {{ selectedShow.releaseYear }}</p>
+    <p>Seasons: {{ selectedShow.seasons }}</p>
+    <p>Total Episodes: {{ selectedShow.totalEpisodes }}</p>
+    <p>Active: {{ selectedShow.active }}</p>
+    <button class="btn btn-danger" (click)="deleteShow(selectedShow.id)">Delete Show</button>
+  </div>
+
+  <!-- Form to create or update a TV show -->
+  <div class="mt-4">
+    <h2>{{ selectedShow.id ? 'Update' : 'Add' }} a TV Show</h2>
+    <form (ngSubmit)="handleSubmit()">
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" [(ngModel)]="selectedShow.title" name="title" required>
+      </div>
+      <div class="mb-3">
+        <label for="genre" class="form-label">Genre</label>
+        <input type="text" class="form-control" id="genre" [(ngModel)]="selectedShow.genre" name="genre" required>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <input type="text" class="form-control" id="description" [(ngModel)]="selectedShow.description" name="description" required>
+      </div>
+      <div class="mb-3">
+        <label for="releaseYear" class="form-label">Release Year</label>
+        <input type="number" class="form-control" id="releaseYear" [(ngModel)]="selectedShow.releaseYear" name="releaseYear" required>
+      </div>
+      <div class="mb-3">
+        <label for="seasons" class="form-label">Seasons</label>
+        <input type="number" class="form-control" id="seasons" [(ngModel)]="selectedShow.seasons" name="seasons" required>
+      </div>
+      <div class="mb-3">
+        <label for="totalEpisodes" class="form-label">Total Episodes</label>
+        <input type="number" class="form-control" id="totalEpisodes" [(ngModel)]="selectedShow.totalEpisodes" name="totalEpisodes" required>
+      </div>
+      <div class="mb-3">
+        <label for="active" class="form-label">Active Show</label>
+        <input type="checkbox" class="form-control" id="active" [(ngModel)]="selectedShow.active" name="active" required>
+      </div>
+      <button type="submit" class="btn btn-primary">{{ selectedShow.id ? 'Update' : 'Add' }} Show</button>
+      </form>
+  </div>
+</div>
