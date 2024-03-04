@@ -82,14 +82,13 @@ public class RatingController {
 		return rating;
 	}
 
-	@DeleteMapping("{showId}/ratings/{ratingId}")
-	public void deleteRating(@PathVariable("showId") int showId, @PathVariable("ratingId") int ratingId,
-			HttpServletResponse rsp) {
-		if (ratingService.deleteRating(ratingId, showId)) {
+	@DeleteMapping("/ratings/{ratingId}")
+	public void deleteRating(@PathVariable("ratingId") int ratingId, HttpServletResponse rsp) {
+		if (ratingService.deleteRating(ratingId)) {
 			rsp.setStatus(204);
 		} else {
 			rsp.setStatus(404);
 		}
-
 	}
+
 }

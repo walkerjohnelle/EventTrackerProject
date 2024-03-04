@@ -2,7 +2,8 @@
   <h2>Ratings</h2>
   <div *ngIf="ratings.length > 0; else noRatingsTemplate">
     <div *ngFor="let rating of ratings" class="rating-item">
-      <p>{{ rating.review }} - Rating: {{ rating.rating }}/10</p>
+      <!-- Include the show name next to the rating -->
+      <p>{{ rating.review }} - Rating: {{ rating.rating }}/10 (Show: {{ rating.tvShow.title }})</p>
       <button class="btn btn-primary" (click)="selectRating(rating)">Edit</button>
       <button class="btn btn-danger" (click)="deleteRating(rating.id)">Delete</button>
     </div>
@@ -30,7 +31,6 @@
           <option [ngValue]="null">Select a TV Show</option>
           <option *ngFor="let tvShow of tvShows" [ngValue]="tvShow.id">{{ tvShow.title }}</option>
         </select>
-
       </div>
       <button type="submit" class="btn btn-success">{{ selectedRating.id ? 'Update' : 'Add' }} Rating</button>
       <button type="button" class="btn btn-secondary" (click)="clearSelection()">Cancel</button>

@@ -41,20 +41,15 @@ public class RatingServiceImpl implements RatingService {
 	}
 
 	@Override
-	public boolean deleteRating(int ratingId, int showId) {
-		TvShow show = tvRepo.findById(showId).orElse(null);
-		if (show == null) {
-			return false;
-		}
-
-		Rating rating = ratingRepo.findById(ratingId).orElse(null);
-		if (rating == null || rating.getTvShow() == null || rating.getTvShow().getId() != showId) {
-			return false;
-		}
-
-		ratingRepo.deleteById(ratingId);
-		return true;
+	public boolean deleteRating(int ratingId) {
+	    Optional<Rating> ratingOpt = ratingRepo.findById(ratingId);
+	    if (ratingOpt.isPresent()) {
+	        ratingRepo.deleteById(ratingId);
+	        return true;
+	    }
+	    return false;
 	}
+
 
 	@Override
 	public List<Rating> getRatingsByShow(int showId) {
@@ -69,15 +64,15 @@ public class RatingServiceImpl implements RatingService {
 
 	@Override
 	public Rating createRating(Rating rating) {
-	    if (rating.getTvShow() == null || rating.getTvShow().getId() == 0) {
-	        throw new RuntimeException("Rating must be associated with a TvShow");
-	    }
-	    // Fetch the TvShow based on the id and set it to the rating
-	    TvShow tvShow = tvRepo.findById(rating.getTvShow().getId())
-	                          .orElseThrow(() -> new RuntimeException("TvShow with id " + rating.getTvShow().getId() + " not found"));
-	    rating.setTvShow(tvShow);
+		if (rating.getTvShow() == null || rating.getTvShow().getId() == 0) {
+			throw new RuntimeException("Rating must be associated with a TvShow");
+		}
+		// Fetch the TvShow based on the id and set it to the rating
+		TvShow tvShow = tvRepo.findById(rating.getTvShow().getId())
+				.orElseThrow(() -> new RuntimeException("TvShow with id " + rating.getTvShow().getId() + " not found"));
+		rating.setTvShow(tvShow);
 
-	    return ratingRepo.save(rating);
+		return ratingRepo.save(rating);
 	}
 
 }

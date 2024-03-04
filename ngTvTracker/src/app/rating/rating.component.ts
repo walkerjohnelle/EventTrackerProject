@@ -19,6 +19,7 @@ export class RatingComponent implements OnInit {
   ratings: Rating[] = [];
   selectedRating: Rating | null = null;
   selectedTvShowId: any;
+  selectedTvShowTitle: any;
 
   constructor(
     private ratingService: RatingService,
@@ -52,7 +53,7 @@ export class RatingComponent implements OnInit {
 
   saveRating(rating: Rating): void {
     if (this.selectedTvShowId) {
-      rating.tvShow = { id: this.selectedTvShowId };
+      rating.tvShow = { id: this.selectedTvShowId, title: this.selectedTvShowTitle };
     }
     if (rating.id) {
       this.updateRating(rating);

@@ -63,16 +63,13 @@ export class RatingService {
   }
 
   destroy(ratingId: number): Observable<void> {
+    // Ensure this.url is correctly set to '/api' or the appropriate base path
     return this.http.delete<void>(`${this.url}/${ratingId}`).pipe(
         catchError((err: any) => {
-          console.error('RatingService.destroy(): error deleting rating:', err);
-          return throwError(
-            () =>
-              new Error(
-                'RatingService.destroy(): error deleting rating: ' + err
-              )
-          );
+            console.error('RatingService.destroy(): error deleting rating:', err);
+            return throwError(() => new Error('RatingService.destroy(): error deleting rating: ' + err));
         })
-      );
-  }
+    );
+}
+
 }
