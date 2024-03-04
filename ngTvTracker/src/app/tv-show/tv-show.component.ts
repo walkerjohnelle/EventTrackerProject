@@ -14,11 +14,18 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./tv-show.component.css'],
 })
 export class TvShowComponent implements OnInit {
+selectRating(_t11: any) {
+throw new Error('Method not implemented.');
+}
+deleteRating(arg0: any) {
+throw new Error('Method not implemented.');
+}
   tvShows: TvShow[] = [];
   selectedShow: TvShow = new TvShow();
   newShow: TvShow = new TvShow();
   userId: number = 0;
   isEditMode: boolean = false;
+ratings: any;
 
   constructor(
     private tvShowService: TvShowService,

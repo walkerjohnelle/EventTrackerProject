@@ -29,7 +29,7 @@
         <label for="tvShow">TV Show</label>
         <select class="form-control" id="tvShow" [(ngModel)]="selectedRating.tvShow.id" name="tvShow" required>
           <option [ngValue]="null">Select a TV Show</option>
-          <option *ngFor="let tvShow of tvShows" [ngValue]="tvShow.id">{{ tvShow.title }}</option>
+          <option *ngFor="let tvShow of tvShows" [ngValue]="tvShow.id"><strong>{{ tvShow.title }}</strong></option>
         </select>
       </div>
       <button type="submit" class="btn btn-success">{{ selectedRating.id ? 'Update' : 'Add' }} Rating</button>
