@@ -17,14 +17,10 @@ public class Rating {
 	private int id;
 	private int rating;
 	private String review;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "tv_show_id")
 	private TvShow tvShow;
-
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
 
 	public int getId() {
 		return id;
@@ -58,14 +54,6 @@ public class Rating {
 		this.tvShow = tvShow;
 	}
 
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -85,8 +73,7 @@ public class Rating {
 
 	@Override
 	public String toString() {
-		return "Rating [id=" + id + ", rating=" + rating + ", review=" + review + ", tvShow=" + tvShow + ", user="
-				+ user + "]";
+		return "Rating [id=" + id + ", rating=" + rating + ", review=" + review + ", tvShow=" + tvShow + "]";
 	}
 
 }

@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -34,12 +33,10 @@ public class TvShow {
 	private String streamingPlatform;
 	@Column(name = "image_url")
 	private String imageUrl;
-	@JsonIgnore
-	@ManyToMany(mappedBy = "shows")
-	private List<User> users;
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "tvShow")
-    private List<Rating> ratings;
+	private List<Rating> ratings;
 
 	public TvShow() {
 
@@ -125,14 +122,6 @@ public class TvShow {
 		this.imageUrl = imageUrl;
 	}
 
-	public List<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(List<User> users) {
-		this.users = users;
-	}
-
 	public List<Rating> getRatings() {
 		return ratings;
 	}
@@ -141,23 +130,6 @@ public class TvShow {
 		this.ratings = ratings;
 	}
 
-	public void addUser(User user) {
-		if (users == null) {
-			users = new ArrayList<>();
-		}
-		if (!users.contains(user)) {
-			users.add(user);
-			user.addShow(this);
-		}
-	}
-
-	public void removeUser(User user) {
-		if (users != null && users.contains(user)) {
-			users.remove(user);
-			user.removeShow(this);
-		}
-	}
-	
 	public void addRating(Rating rating) {
 		if (ratings == null) {
 			ratings = new ArrayList<>();
@@ -178,7 +150,7 @@ public class TvShow {
 			rating.setTvShow(null);
 		}
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -201,7 +173,7 @@ public class TvShow {
 		return "TvShow [id=" + id + ", title=" + title + ", genre=" + genre + ", description=" + description
 				+ ", releaseYear=" + releaseYear + ", seasons=" + seasons + ", totalEpisodes=" + totalEpisodes
 				+ ", active=" + active + ", streamingPlatform=" + streamingPlatform + ", imageUrl=" + imageUrl
-				+ ", users=" + users + ", ratings=" + ratings + "]";
+				+ ", ratings=" + ratings + "]";
 	}
 
 }

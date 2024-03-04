@@ -8,12 +8,10 @@ public interface RatingService {
 	List<Rating> findAllRatings();
 
 	Rating findById(int ratingId);
-	
+
 	Rating createRating(Rating rating);
 
 	Rating updateRating(int ratingId, Rating rating);
-
-	List<Rating> getUserRatings(int userId);
 
 	boolean deleteRating(int ratingId, int showId);
 

@@ -3,6 +3,7 @@ package com.skilldistillery.tvtracker.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import com.skilldistillery.tvtracker.services.TvShowService;
 
 import jakarta.servlet.http.HttpServletResponse;
 
+@CrossOrigin({ "*", "http://localhost/" })
 @RequestMapping("api")
 @RestController
 public class RatingController {
@@ -41,15 +43,6 @@ public class RatingController {
 			rsp.setStatus(404);
 		}
 		return rating;
-	}
-
-	@GetMapping("users/{userId}/ratings")
-	public List<Rating> getUserRatings(@PathVariable("userId") int userId, HttpServletResponse rsp) {
-		List<Rating> userRatings = ratingService.getUserRatings(userId);
-		if (userRatings == null || userRatings.isEmpty()) {
-			rsp.setStatus(404);
-		}
-		return userRatings;
 	}
 
 	@GetMapping("shows/{showId}/ratings")

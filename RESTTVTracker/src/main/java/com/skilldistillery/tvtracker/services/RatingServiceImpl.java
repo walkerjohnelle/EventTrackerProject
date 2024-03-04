@@ -10,16 +10,12 @@ import com.skilldistillery.tvtracker.entities.Rating;
 import com.skilldistillery.tvtracker.entities.TvShow;
 import com.skilldistillery.tvtracker.repositories.RatingRepository;
 import com.skilldistillery.tvtracker.repositories.TvShowRepository;
-import com.skilldistillery.tvtracker.repositories.UserRepository;
 
 @Service
 public class RatingServiceImpl implements RatingService {
 
 	@Autowired
 	private RatingRepository ratingRepo;
-
-	@Autowired
-	private UserRepository userRepo;
 
 	@Autowired
 	private TvShowRepository tvRepo;
@@ -32,12 +28,6 @@ public class RatingServiceImpl implements RatingService {
 	@Override
 	public Rating findById(int ratingId) {
 		return ratingRepo.findById(ratingId).orElse(null);
-	}
-
-	@Override
-	public Rating createRating(Rating rating) {
-
-		return ratingRepo.saveAndFlush(rating);
 	}
 
 	@Override
@@ -67,11 +57,6 @@ public class RatingServiceImpl implements RatingService {
 	}
 
 	@Override
-	public List<Rating> getUserRatings(int userId) {
-		return userRepo.findById(userId).map(user -> user.getRatings()).orElse(null);
-	}
-
-	@Override
 	public List<Rating> getRatingsByShow(int showId) {
 		Optional<TvShow> showOptional = tvRepo.findById(showId);
 		if (showOptional.isPresent()) {
@@ -80,6 +65,19 @@ public class RatingServiceImpl implements RatingService {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public Rating createRating(Rating rating) {
+	    if (rating.getTvShow() == null || rating.getTvShow().getId() == 0) {
+	        throw new RuntimeException("Rating must be associated with a TvShow");
+	    }
+	    // Fetch the TvShow based on the id and set it to the rating
+	    TvShow tvShow = tvRepo.findById(rating.getTvShow().getId())
+	                          .orElseThrow(() -> new RuntimeException("TvShow with id " + rating.getTvShow().getId() + " not found"));
+	    rating.setTvShow(tvShow);
+
+	    return ratingRepo.save(rating);
 	}
 
 }

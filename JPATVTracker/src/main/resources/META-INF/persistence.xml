@@ -5,7 +5,6 @@
 
 		<class>com.skilldistillery.tvtracker.entities.Rating</class>
 		<class>com.skilldistillery.tvtracker.entities.TvShow</class>
-		<class>com.skilldistillery.tvtracker.entities.User</class>
 
 		<properties>
 			<property name="jakarta.persistence.jdbc.url"

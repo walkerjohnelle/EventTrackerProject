@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.skilldistillery.tvtracker.entities.TvShow;
-import com.skilldistillery.tvtracker.entities.User;
 import com.skilldistillery.tvtracker.repositories.TvShowRepository;
 
 @Service
@@ -30,8 +29,8 @@ public class TvShowServiceImpl implements TvShowService {
 	}
 
 	@Override
-	public TvShow createShow(TvShow show) {
-		return tvRepo.saveAndFlush(show);
+	public TvShow createShow(TvShow tvShow) {
+		return tvRepo.saveAndFlush(tvShow);
 	}
 
 	@Override
@@ -50,13 +49,6 @@ public class TvShowServiceImpl implements TvShowService {
 		Optional<TvShow> optShow = tvRepo.findById(showId);
 		if (optShow.isPresent()) {
 			TvShow show = optShow.get();
-
-			List<User> users = show.getUsers();
-			if (users != null) {
-				for (User user : users) {
-					user.removeShow(show);
-				}
-			}
 
 			show.setRatings(null);
 

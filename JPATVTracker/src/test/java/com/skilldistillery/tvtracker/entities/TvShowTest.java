@@ -47,16 +47,9 @@ public class TvShowTest {
 	}
 
 	@Test
-	void test_TvShow_User_mapping() {
-		assertNotNull(show);
-		assertEquals("walkerjohnelle", show.getUsers().get(0).getUsername());
-		
-	}
-	
-	@Test
 	void test_TvShow_Rating_mapping() {
 		assertNotNull(show);
 		assertEquals(10, show.getRatings().get(0).getRating());
-		
+
 	}
 }

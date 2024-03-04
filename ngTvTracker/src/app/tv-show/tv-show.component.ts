@@ -17,8 +17,14 @@ export class TvShowComponent implements OnInit {
   tvShows: TvShow[] = [];
   selectedShow: TvShow = new TvShow();
   newShow: TvShow = new TvShow();
+  userId: number = 0;
+  isEditMode: boolean = false;
 
-  constructor(private tvShowService: TvShowService, private activatedRoute: ActivatedRoute, private router: Router) {}
+  constructor(
+    private tvShowService: TvShowService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadTvShows();
@@ -26,21 +32,25 @@ export class TvShowComponent implements OnInit {
 
   loadTvShows(): void {
     this.tvShowService.index().subscribe({
-      next: (shows) => this.tvShows = shows,
-      error: (error) => console.error('Error loading TV shows:', error)
+      next: (shows) => (this.tvShows = shows),
+      error: (error) => console.error('Error loading TV shows:', error),
     });
   }
 
   selectShow(show: TvShow): void {
     this.selectedShow = { ...show };
+    this.isEditMode = true;
   }
 
   handleSubmit(): void {
-    if (this.selectedShow.id) {
+    if (this.isEditMode) {
       this.updateExistingShow(this.selectedShow);
     } else {
       this.addNewShow(this.newShow);
     }
+  }
+  addNewShowButtonClicked(): void {
+    this.selectedShow = new TvShow(); // Reset to a new object
   }
 
   updateExistingShow(show: TvShow): void {
@@ -49,7 +59,7 @@ export class TvShowComponent implements OnInit {
         this.loadTvShows(); // Refresh list
         this.selectedShow = new TvShow(); // Reset form
       },
-      error: (error) => console.error('Error updating TV show:', error)
+      error: (error) => console.error('Error updating TV show:', error),
     });
   }
 
@@ -57,25 +67,28 @@ export class TvShowComponent implements OnInit {
     this.tvShowService.create(show).subscribe({
       next: (newShow) => {
         this.tvShows.push(newShow);
-        this.newShow = new TvShow(); // Reset form for new entry
+        console.log('Adding new show:', show);
+
+        this.loadTvShows();
+        this.newShow = new TvShow(); // Reset newShow object
       },
-      error: (error) => console.error('Error creating TV show:', error)
+      error: (error) => console.error('Error creating TV show:', error),
     });
   }
 
   deleteShow(showId: number): void {
     this.tvShowService.destroy(showId).subscribe({
       next: () => {
-        this.tvShows = this.tvShows.filter(show => show.id !== showId);
+        this.tvShows = this.tvShows.filter((show) => show.id !== showId);
         if (this.selectedShow.id === showId) {
-          this.selectedShow = new TvShow(); // Reset if deleted show was selected
+          this.loadTvShows();
         }
       },
-      error: (error) => console.error('Error deleting TV show:', error)
+      error: (error) => console.error('Error deleting TV show:', error),
     });
   }
 
   clearSelection(): void {
-    this.selectedShow = new TvShow(); // Reset selection
+    this.loadTvShows();
   }
 }

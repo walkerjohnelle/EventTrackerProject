@@ -1,3 +1,5 @@
+import { Rating } from "./rating";
+
 export class TvShow {
   id: number;
   title: string;
@@ -8,6 +10,7 @@ export class TvShow {
   totalEpisodes: number;
   streamingPlatform: string;
   active: boolean;
+  ratings: Rating [];
 
   constructor(id: number = 0, title: string = '', description: string = '', releaseYear: number = 0,
   genre: string = '', seasons: number = 0, totalEpisodes: number = 0, streamingPlatform: string = '',
@@ -21,5 +24,6 @@ export class TvShow {
     this.totalEpisodes = totalEpisodes;
     this.streamingPlatform = streamingPlatform;
     this.active = active;
+    this.ratings = [];
   }
 }

@@ -16,22 +16,6 @@ CREATE SCHEMA IF NOT EXISTS `tvwatchlistdb` DEFAULT CHARACTER SET utf8 ;
 USE `tvwatchlistdb` ;
 
 -- -----------------------------------------------------
--- Table `user`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `user` ;
-
-CREATE TABLE IF NOT EXISTS `user` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `email` VARCHAR(100) NOT NULL,
-  `username` VARCHAR(100) NOT NULL,
-  `password` VARCHAR(45) NOT NULL,
-  `profile_picture_url` TEXT NULL,
-  `active` TINYINT NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `tv_show`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `tv_show` ;
@@ -60,41 +44,10 @@ CREATE TABLE IF NOT EXISTS `rating` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `rating` INT NULL,
   `review` TEXT NULL,
-  `user_id` INT NOT NULL,
   `tv_show_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_rating_user1_idx` (`user_id` ASC),
   INDEX `fk_rating_tv_show1_idx` (`tv_show_id` ASC),
-  CONSTRAINT `fk_rating_user1`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_rating_tv_show1`
-    FOREIGN KEY (`tv_show_id`)
-    REFERENCES `tv_show` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `user_has_tv_show`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `user_has_tv_show` ;
-
-CREATE TABLE IF NOT EXISTS `user_has_tv_show` (
-  `user_id` INT NOT NULL,
-  `tv_show_id` INT NOT NULL,
-  PRIMARY KEY (`user_id`, `tv_show_id`),
-  INDEX `fk_user_has_tv_show_tv_show1_idx` (`tv_show_id` ASC),
-  INDEX `fk_user_has_tv_show_user_idx` (`user_id` ASC),
-  CONSTRAINT `fk_user_has_tv_show_user`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_user_has_tv_show_tv_show1`
     FOREIGN KEY (`tv_show_id`)
     REFERENCES `tv_show` (`id`)
     ON DELETE NO ACTION
@@ -111,16 +64,6 @@ GRANT SELECT, INSERT, TRIGGER, UPDATE, DELETE ON TABLE * TO 'tvguru'@'localhost'
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
--- -----------------------------------------------------
--- Data for table `user`
--- -----------------------------------------------------
-START TRANSACTION;
-USE `tvwatchlistdb`;
-INSERT INTO `user` (`id`, `email`, `username`, `password`, `profile_picture_url`, `active`) VALUES (1, 'johnellewalker@gmail.com', 'walkerjohnelle', 'password', '', 1);
-
-COMMIT;
-
 
 -- -----------------------------------------------------
 -- Data for table `tv_show`
@@ -141,22 +84,8 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `tvwatchlistdb`;
-INSERT INTO `rating` (`id`, `rating`, `review`, `user_id`, `tv_show_id`) VALUES (1, 10, 'This show is now quite literally the gold standard of television for me now! It\'s going to be really hard for anything to really compete. The Sapranos literally has everything from comedy, family drama, crime thrills, and did I mention comedy? I  seriously can\'t believe that this show has been out for over 25 years and I\'m just now getting to it!', 1, 1);
-INSERT INTO `rating` (`id`, `rating`, `review`, `user_id`, `tv_show_id`) VALUES (2, 9, 'This show is sow impoartant for the culture. Even though I\'m not from ATL, I  feel like this show definitely transports me and is as funny as it is thought provoking', 1, 2);
-
-COMMIT;
-
-
--- -----------------------------------------------------
--- Data for table `user_has_tv_show`
--- -----------------------------------------------------
-START TRANSACTION;
-USE `tvwatchlistdb`;
-INSERT INTO `user_has_tv_show` (`user_id`, `tv_show_id`) VALUES (1, 1);
-INSERT INTO `user_has_tv_show` (`user_id`, `tv_show_id`) VALUES (1, 2);
-INSERT INTO `user_has_tv_show` (`user_id`, `tv_show_id`) VALUES (1, 3);
-INSERT INTO `user_has_tv_show` (`user_id`, `tv_show_id`) VALUES (1, 4);
-INSERT INTO `user_has_tv_show` (`user_id`, `tv_show_id`) VALUES (1, 5);
+INSERT INTO `rating` (`id`, `rating`, `review`, `tv_show_id`) VALUES (1, 10, 'This show is now quite literally the gold standard of television for me now! It\'s going to be really hard for anything to really compete. The Sapranos literally has everything from comedy, family drama, crime thrills, and did I mention comedy? I  seriously can\'t believe that this show has been out for over 25 years and I\'m just now getting to it!', 1);
+INSERT INTO `rating` (`id`, `rating`, `review`, `tv_show_id`) VALUES (2, 9, 'This show is sow impoartant for the culture. Even though I\'m not from ATL, I  feel like this show definitely transports me and is as funny as it is thought provoking', 2);
 
 COMMIT;
 

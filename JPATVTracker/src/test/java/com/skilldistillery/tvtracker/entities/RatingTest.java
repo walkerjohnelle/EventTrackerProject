@@ -45,17 +45,12 @@ public class RatingTest {
 		assertEquals(10, rating.getRating());
 
 	}
-	@Test
-	void test_Rating_User_entity_mapping() {
-		assertNotNull(rating);
-		assertEquals("walkerjohnelle", rating.getUser().getUsername());
-		
-	}
+
 	@Test
 	void test_Rating_TvShow_entity_mapping() {
 		assertNotNull(rating);
 		assertEquals("The Sapranos", rating.getTvShow().getTitle());
-		
+
 	}
 
 }

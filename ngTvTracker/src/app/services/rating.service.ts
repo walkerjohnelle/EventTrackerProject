@@ -12,19 +12,8 @@ export class RatingService {
 
   constructor(private http: HttpClient) {}
 
-  getHttpOptions() {
-    const token = localStorage.getItem('authToken');
-    let options = {
-      headers: new HttpHeaders({
-        Authorization: 'Bearer ' + token,
-        'X-Requested-With': 'XMLHttpRequest',
-      }),
-    };
-    return options;
-  }
-
-  index(): Observable<Rating[]> {
-    return this.http.get<Rating[]>(this.url, this.getHttpOptions()).pipe(
+   index(): Observable<Rating[]> {
+    return this.http.get<Rating[]>(this.url).pipe(
       catchError((err: any) => {
         console.log(err);
         return throwError(
@@ -36,8 +25,7 @@ export class RatingService {
   }
 
   show(ratingId: number): Observable<Rating> {
-    return this.http
-      .get<Rating>(this.url + '/' + ratingId, this.getHttpOptions())
+    return this.http.get<Rating>(this.url + '/' + ratingId)
       .pipe(
         catchError((err: any) => {
           console.log(err);
@@ -49,8 +37,9 @@ export class RatingService {
       );
   }
 
-  create(rating: Rating) {
-    return this.http.post<Rating>(this.url, rating, this.getHttpOptions()).pipe(
+  create(rating: Rating): Observable<Rating> {
+    console.log('Sending rating with tvShowId:', rating);
+    return this.http.post<Rating>(this.url, rating).pipe(
       catchError((err: any) => {
         console.error(err);
         return throwError(
@@ -61,12 +50,7 @@ export class RatingService {
   }
 
   update(ratingId: number, updatedRating: Rating): Observable<Rating> {
-    return this.http
-      .put<Rating>(
-        `${this.url}/${ratingId}`,
-        updatedRating,
-        this.getHttpOptions()
-      )
+    return this.http.put<Rating>(`${this.url}/${ratingId}`,updatedRating)
       .pipe(
         catchError((err: any) => {
           console.error('RatingService.update(): error updating rating:', err);
@@ -79,9 +63,7 @@ export class RatingService {
   }
 
   destroy(ratingId: number): Observable<void> {
-    return this.http
-      .delete<void>(`${this.url}/${ratingId}`, this.getHttpOptions())
-      .pipe(
+    return this.http.delete<void>(`${this.url}/${ratingId}`).pipe(
         catchError((err: any) => {
           console.error('RatingService.destroy(): error deleting rating:', err);
           return throwError(

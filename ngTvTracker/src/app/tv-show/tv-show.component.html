@@ -51,9 +51,9 @@
         <label for="totalEpisodes" class="form-label">Total Episodes</label>
         <input type="number" class="form-control" id="totalEpisodes" [(ngModel)]="selectedShow.totalEpisodes" name="totalEpisodes" required>
       </div>
-      <div class="mb-3">
-        <label for="active" class="form-label">Active Show</label>
-        <input type="checkbox" class="form-control" id="active" [(ngModel)]="selectedShow.active" name="active" required>
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="active" [(ngModel)]="selectedShow.active" name="active">
+        <label for="active" class="form-check-label">Active Show</label>
       </div>
       <button type="submit" class="btn btn-primary">{{ selectedShow.id ? 'Update' : 'Add' }} Show</button>
       </form>
